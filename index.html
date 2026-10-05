@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedStudio - Preparazione Medicina</title>
-    <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -15,8 +14,7 @@
             --bg-card: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --accent-hover: #0284c7;
+            --accent: #ff2986;
             --border: #475569;
             --success: #22c55e;
             --warning: #eab308;
@@ -29,8 +27,7 @@
             --bg-card: #f1f5f9;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --accent: #0284c7;
-            --accent-hover: #0369a1;
+            --accent: #ff2986;
             --border: #cbd5e1;
             --success: #16a34a;
             --warning: #ca8a04;
@@ -40,14 +37,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-primary); color: var(--text-main); line-height: 1.5; padding-bottom: 70px; }
 
-        /* Header Navigation */
         header {
-            background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: var(--bg-secondary); border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100;
         }
         .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
@@ -60,75 +52,61 @@
         }
         .btn:hover { opacity: 0.9; }
         .btn-secondary { background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
-        .btn-secondary:hover { background-color: var(--border); }
 
-        /* Welcome Overlay Modal */
         .welcome-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: rgba(15, 23, 42, 0.95);
-            display: flex; justify-content: center; align-items: center;
+            background-color: rgba(15, 23, 42, 0.95); display: flex; justify-content: center; align-items: center;
             z-index: 1000; padding: 1rem;
         }
         .welcome-card {
             background-color: var(--bg-secondary); border: 2px solid var(--border);
-            border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%;
-            text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%; text-align: center;
         }
         .user-selector { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
         .user-option-btn {
-            padding: 1rem; border-radius: 12px; border: 2px solid transparent;
-            color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between;
-            transition: transform 0.2s;
+            padding: 1rem; border-radius: 12px; border: none; color: white;
+            font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
         }
-        .user-option-btn:hover { transform: scale(1.02); }
 
-        /* Container Layout */
         .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border);
-            margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem;
-        }
+        .nav-tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
         .tab-btn {
             background: none; border: none; color: var(--text-muted); padding: 0.75rem 1.25rem;
-            font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 8px 8px 0 0;
-            white-space: nowrap; transition: 0.2s;
+            font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 8px 8px 0 0; white-space: nowrap;
         }
         .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); background-color: var(--bg-secondary); }
 
-        /* Cards & Section Containers */
         .card {
             background-color: var(--bg-secondary); border: 1px solid var(--border);
             border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Syllabus Accordion & Topic Styles */
-        .subject-title { font-size: 1.3rem; margin-bottom: 1rem; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 0.5rem; }
-        .unit-card { margin-bottom: 1rem; }
+        .subject-title { font-size: 1.3rem; margin: 1.5rem 0 1rem 0; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 0.5rem; }
         .unit-header {
             font-weight: 700; cursor: pointer; display: flex; justify-content: space-between;
             align-items: center; padding: 0.75rem 1rem; background-color: var(--bg-card);
-            border-radius: 8px; border: 1px solid var(--border);
+            border-radius: 8px; border: 1px solid var(--border); user-select: none;
         }
-        .topic-list { margin-top: 0.5rem; padding-left: 0.5rem; }
+        .topic-list { margin-top: 0.5rem; padding-left: 0.5rem; display: block; }
+        .topic-list.collapsed { display: none; }
+        
         .topic-item {
             background-color: var(--bg-secondary); border: 1px solid var(--border);
             border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem;
-            display: flex; flex-direction: column; gap: 0.5rem;
+            display: flex; flex-direction: column; gap: 0.5rem; transition: opacity 0.3s;
         }
+        .topic-item.status-done { opacity: 0.5; background-color: rgba(0,0,0,0.1); }
+        .topic-item.status-done .topic-text { text-decoration: line-through; }
+
         @media (min-width: 640px) {
             .topic-item { flex-direction: row; align-items: center; justify-content: space-between; }
         }
         .topic-info { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
         .topic-controls { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
-        /* Badge & Selects */
         .priority-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
         .priority-low { background-color: var(--success); }
         .priority-med { background-color: var(--warning); }
@@ -136,21 +114,17 @@
 
         select, input[type="text"], input[type="number"] {
             background-color: var(--bg-primary); color: var(--text-main);
-            border: 1px solid var(--border); padding: 0.4rem 0.6rem; border-radius: 6px;
-            font-size: 0.85rem;
+            border: 1px solid var(--border); padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.85rem;
         }
 
-        /* Dashboard Metrics */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .metric-card { text-align: center; }
         .metric-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
         .metric-label { font-size: 0.85rem; color: var(--text-muted); }
 
-        /* Pomodoro Timer */
-        .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--accent); }
-        .timer-controls { display: flex; justify-content: center; gap: 0.75rem; }
+        .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 0.5rem 0; color: var(--accent); }
+        .timer-controls { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
 
-        /* Flashcard Roulette Flip Card */
         .flashcard-box { perspective: 1000px; height: 220px; cursor: pointer; margin: 1rem 0; }
         .flashcard-inner {
             position: relative; width: 100%; height: 100%; text-align: center;
@@ -165,24 +139,15 @@
         }
         .flashcard-back { transform: rotateY(180deg); background-color: var(--bg-secondary); }
 
-        /* Formula Sheet Grid */
         .formula-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
-        .formula-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
-
-        @media (max-width: 600px) {
-            .logo span { display: none; }
-            .timer-display { font-size: 2.5rem; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- OVERLAY SELEZIONE PROFILO -->
     <div id="welcomeOverlay" class="welcome-overlay" style="display: none;">
         <div class="welcome-card">
             <h2>👋 Benvenuta in MedStudio!</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Chi sta studiando oggi? Seleziona il tuo profilo:</p>
-            
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Seleziona il tuo profilo:</p>
             <div class="user-selector">
                 <button class="user-option-btn" style="background-color: #ff2986;" onclick="selectUserProfile('SILVIA', '#ff2986', 'ok sei SILVIA prinCESS 👑')">
                     <span>🌸 SILVIA</span> <i class="fa-solid fa-crown"></i>
@@ -203,22 +168,20 @@
             <span>MedStudio Pro</span>
         </div>
         <div class="header-actions">
-            <span id="userBadge" style="font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.6rem; border-radius: 6px; background-color: var(--bg-card); cursor: pointer;" onclick="showWelcomeModal()" title="Cambia Profilo">--</span>
-            <button class="btn btn-secondary" onclick="exportData()" title="Esporta Backup JSON"><i class="fa-solid fa-download"></i></button>
-            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" title="Importa Backup JSON"><i class="fa-solid fa-upload"></i></button>
+            <span id="userBadge" style="font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.6rem; border-radius: 6px; background-color: var(--bg-card); cursor: pointer;" onclick="showWelcomeModal()">--</span>
+            <button class="btn btn-secondary" onclick="exportData()"><i class="fa-solid fa-download"></i></button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
             <input type="file" id="importFile" style="display:none;" onchange="importData(event)">
             <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
         </div>
     </header>
 
     <div class="container">
-        <!-- Saluto Personalizzato -->
         <div class="card" style="border-left: 5px solid var(--accent);">
             <h2 id="welcomeGreeting">Ok, iniziamo a studiare!</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Tieni traccia del tuo syllabus e dei tuoi progressi per il semestre aperto.</p>
         </div>
 
-        <!-- Dashboard Metrics -->
         <div class="dashboard-grid">
             <div class="card metric-card">
                 <div class="metric-value" id="examCountdown">--</div>
@@ -238,21 +201,20 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('syllabusTab')"><i class="fa-solid fa-book"></i> Syllabus & Spaced Repetition</button>
             <button class="tab-btn" onclick="switchTab('timerTab')"><i class="fa-solid fa-stopwatch"></i> Pomodoro & Ore</button>
-            <button class="tab-btn" onclick="switchTab('flashcardsTab')"><i class="fa-solid fa-layer-group"></i> Flashcard Roulette</button>
+            <button class="tab-btn" onclick="switchTab('flashcardsTab')"><i class="fa-solid fa-layer-group"></i> Flashcards</button>
             <button class="tab-btn" onclick="switchTab('simulationsTab')"><i class="fa-solid fa-chart-line"></i> Simulazioni Quiz</button>
             <button class="tab-btn" onclick="switchTab('formulasTab')"><i class="fa-solid fa-square-root-variable"></i> Formulario</button>
         </div>
 
         <!-- TAB 1: SYLLABUS -->
         <div id="syllabusTab" class="tab-content active">
-            <div class="card" style="background-color: rgba(56, 189, 248, 0.1); border-color: var(--accent);">
+            <div class="card" style="background-color: rgba(255, 41, 134, 0.08); border-color: var(--accent);">
                 <h3><i class="fa-solid fa-clock-rotate-left"></i> In Scadenza di Ripasso Oggi</h3>
                 <div id="dueTodayList" style="margin-top: 0.5rem;">
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza di ripasso per oggi. Ottimo lavoro!</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza oggi.</p>
                 </div>
             </div>
 
@@ -263,6 +225,19 @@
         <div id="timerTab" class="tab-content">
             <div class="card" style="max-width: 500px; margin: 0 auto;">
                 <h3 style="text-align: center;"><i class="fa-solid fa-brain"></i> Timer Pomodoro Focus</h3>
+                
+                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; align-items: center;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted);">Durata:</label>
+                    <select id="timerPreset" onchange="setTimerPreset(this.value)">
+                        <option value="15">15 min</option>
+                        <option value="25" selected>25 min</option>
+                        <option value="45">45 min</option>
+                        <option value="60">60 min</option>
+                    </select>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">oppure:</span>
+                    <input type="number" id="customMinutes" placeholder="min" style="width: 70px;" onchange="setCustomTimer(this.value)">
+                </div>
+
                 <div class="timer-display" id="timerDisplay">25:00</div>
                 
                 <div style="margin-bottom: 1rem;">
@@ -292,18 +267,29 @@
 
         <!-- TAB 3: FLASHCARDS -->
         <div id="flashcardsTab" class="tab-content">
+            <!-- CREA NUOVA FLASHCARD -->
+            <div class="card" style="max-width: 600px; margin: 0 auto 1.5rem auto;">
+                <h3><i class="fa-solid fa-plus-circle"></i> Crea Nuova Flashcard</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                    <input type="text" id="fcFrontInput" placeholder="Domanda / Concetto (Fronte)">
+                    <input type="text" id="fcBackInput" placeholder="Risposta / Spiegazione (Retro)">
+                    <button class="btn" onclick="addCustomFlashcard()"><i class="fa-solid fa-floppy-disk"></i> Salva Flashcard</button>
+                </div>
+            </div>
+
+            <!-- ESTRAI E RIPASSA -->
             <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
                 <h3><i class="fa-solid fa-shuffle"></i> Flashcard Active Recall</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Ripassa in modo casuale gli argomenti contrassegnati come "In Ripasso"</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Estrai una carta casuale (dalla lista creata o dai tuoi argomenti in ripasso)</p>
 
                 <div class="flashcard-box" id="flashcardBox" onclick="flipCard()">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
                             <span id="fcSubject" class="metric-label" style="text-transform: uppercase;">Materia</span>
-                            <h3 id="fcTopicTitle" style="margin-top: 0.5rem;">Clicca su "Estrai Flashcard" per iniziare</h3>
+                            <h3 id="fcTopicTitle" style="margin-top: 0.5rem;">Clicca per estrarre una carta</h3>
                         </div>
                         <div class="flashcard-back">
-                            <p id="fcNotes">Note e concetti chiave registrati per questo argomento.</p>
+                            <p id="fcNotes">Note e spiegazione.</p>
                         </div>
                     </div>
                 </div>
@@ -320,11 +306,11 @@
                 <h3><i class="fa-solid fa-plus"></i> Registra Nuova Simulazione / Quiz</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
                     <div>
-                        <label style="font-size: 0.8rem;">Risposte Corrette (+1.5):</label>
+                        <label style="font-size: 0.8rem;">Corrette (+1.5):</label>
                         <input type="number" id="simCorrect" value="0" min="0" style="width: 100%;">
                     </div>
                     <div>
-                        <label style="font-size: 0.8rem;">Risposte Errate (-0.4):</label>
+                        <label style="font-size: 0.8rem;">Errate (-0.4):</label>
                         <input type="number" id="simWrong" value="0" min="0" style="width: 100%;">
                     </div>
                     <div>
@@ -348,23 +334,22 @@
         <!-- TAB 5: FORMULARIO -->
         <div id="formulasTab" class="tab-content">
             <div class="formula-grid">
-                <div class="card formula-card">
-                    <h4>Fisica: Cinematica & Dinamica</h4>
-                    <p><b>Velocità media:</b> $v = \frac{\Delta s}{\Delta t}$</p>
+                <div class="card">
+                    <h4 style="color: var(--accent);">Fisica: Cinematica & Dinamica</h4>
+                    <p><b>Velocità:</b> $v = \frac{\Delta s}{\Delta t}$</p>
                     <p><b>Accelerazione:</b> $a = \frac{\Delta v}{\Delta t}$</p>
-                    <p><b>Legge di Newton:</b> $F = m \cdot a$</p>
-                    <p><b>Lavoro:</b> $L = F \cdot s \cdot \cos(\theta)$</p>
+                    <p><b>Forza:</b> $F = m \cdot a$</p>
                 </div>
-                <div class="card formula-card">
-                    <h4>Fisica: Fluidi & Termodinamica</h4>
+                <div class="card">
+                    <h4 style="color: var(--accent);">Fisica: Fluidi & Termodinamica</h4>
                     <p><b>Pressione:</b> $P = \frac{F}{S}$</p>
-                    <p><b>Legge di Stevino:</b> $P = P_0 + \rho \cdot g \cdot h$</p>
-                    <p><b>Equazione dei Gas Perfetti:</b> $P \cdot V = n \cdot R \cdot T$</p>
+                    <p><b>Stevino:</b> $P = P_0 + \rho \cdot g \cdot h$</p>
+                    <p><b>Gas Perfetti:</b> $P \cdot V = n \cdot R \cdot T$</p>
                 </div>
-                <div class="card formula-card">
-                    <h4>Chimica: Moli & Soluzioni</h4>
+                <div class="card">
+                    <h4 style="color: var(--accent);">Chimica: Soluzioni & pH</h4>
                     <p><b>Moli:</b> $n = \frac{m}{PM}$</p>
-                    <p><b>Molarità:</b> $M = \frac{n_{soluto}}{V_{soluzione}(L)}$</p>
+                    <p><b>Molarità:</b> $M = \frac{n}{V(L)}$</p>
                     <p><b>pH:</b> $pH = -\log_{10}[H^+]$</p>
                 </div>
             </div>
@@ -376,47 +361,55 @@
             "Biologia": [
                 {
                     unit: "Unità 1 - Basi dell'organizzazione biologica",
-                    topics: ["1.1 L'albero della vita e classificazione", "1.2 Bioelementi ed acqua", "1.3 Macromolecole biologiche: Proteine", "1.4 Carboidrati e Lipidi", "1.5 Acidi Nucleici (DNA e RNA)"]
+                    topics: ["1.1 L'albero della vita e classificazione", "1.2 Bioelementi ed acqua", "1.3 Proteine", "1.4 Carboidrati e Lipidi", "1.5 Acidi Nucleici (DNA e RNA)"]
                 },
                 {
                     unit: "Unità 2 - Struttura e Funzione Cellulare",
-                    topics: ["2.1 Organizzazione cellulare procariotica ed eucariotica", "2.2 Membrana cellulare e trasporto", "2.3 Organelli citoplasmatici", "2.4 Bioenergetica cellulare: ATP e Respirazione", "2.5 Fotosintesi clorofilliana"]
+                    topics: ["2.1 Procarioti ed Eucarioti", "2.2 Membrana cellulare e trasporto", "2.3 Organelli citoplasmatici", "2.4 Respirazione cellulare e ATP", "2.5 Fotosintesi clorofilliana"]
+                },
+                {
+                    unit: "Unità 3 - Riproduzione ed Ereditarietà",
+                    topics: ["3.1 Ciclo cellulare e Mitosi", "3.2 Meiosi e Gametogenesi", "3.3 Genetica Mendeliana", "3.4 Genetica Umana e Malattie Ereditarie"]
+                },
+                {
+                    unit: "Unità 4 - Anatomia e Fisiologia Umana",
+                    topics: ["4.1 Sistema Cardiovascolare", "4.2 Apparato Respiratorio", "4.3 Apparato Digerente", "4.4 Sistema Nervoso ed Endocrino"]
                 }
             ],
             "Chimica": [
                 {
                     unit: "Unità 1 - Struttura della Materia",
-                    topics: ["1.1 La struttura dell'atomo e particelle subatomiche", "1.2 Tavola periodica e proprietà periodiche", "1.3 Legami chimici (Ionico, Covalente, Metallico)", "1.4 Forze intermolecolari"]
+                    topics: ["1.1 L'atomo e particelle subatomiche", "1.2 Tavola periodica e proprietà", "1.3 Legami chimici", "1.4 Forze intermolecolari"]
                 },
                 {
                     unit: "Unità 2 - Stechiometria e Soluzioni",
-                    topics: ["2.1 Il concetto di Mole e costante di Avogadro", "2.2 Bilanciamento delle reazioni chimiche", "2.3 Concentrazione delle soluzioni (Molarità, Molarità)", "2.4 Reazioni acido-base e calcolo del pH"]
+                    topics: ["2.1 Mole e Numero di Avogadro", "2.2 Bilanciamento Reazioni", "2.3 Concentrazione Soluzioni", "2.4 Acidi, Basi e pH"]
                 }
             ],
             "Fisica": [
                 {
                     unit: "Unità 1 - Cinematica e Dinamica",
-                    topics: ["1.1 Vettori e grandezze fisiche", "1.2 Moto rettilineo uniforme ed uniformemente accelerato", "1.3 I tre principi della Dinamica", "1.4 Forza peso, attrito e forza elastica"]
+                    topics: ["1.1 Vettori e Moti", "1.2 Principi della Dinamica", "1.3 Lavoro ed Energia"]
                 },
                 {
-                    unit: "Unità 2 - Meccanica dei Fluidi",
-                    topics: ["2.1 Densità e Pressione", "2.2 Principio di Pascal e legge di Stevino", "2.3 Principio di Archimede", "2.4 Dinamica dei fluidi ideali: Equazione di continuità e Bernoulli"]
+                    unit: "Unità 2 - Fluidi e Termodinamica",
+                    topics: ["2.1 Pressione e Principi dei Fluidi", "2.2 Temperatura, Calore e Gas Perfetti"]
                 }
             ]
         };
 
         let appState = {
             userName: null,
-            userColor: '#38bdf8',
+            userColor: '#ff2986',
             userCustomGreeting: '',
             topicsData: {},
             timerSeconds: 25 * 60,
             timerRunning: false,
             timerInterval: null,
-            timerLastTimestamp: null,
             studyHours: { "Biologia": 0, "Chimica": 0, "Fisica": 0 },
             simulations: [],
-            lastStudyDate: null,
+            customFlashcards: [],
+            collapsedUnits: {},
             streak: 0,
             theme: 'dark'
         };
@@ -424,12 +417,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadState();
             initSyllabusData();
-            
-            if (!appState.userName) {
-                showWelcomeModal();
-            } else {
-                applyUserProfile();
-            }
+            if (!appState.userName) showWelcomeModal();
+            else applyUserProfile();
 
             renderSyllabus();
             updateDashboard();
@@ -442,9 +431,8 @@
         function loadState() {
             const saved = localStorage.getItem("medstudio_state");
             if (saved) {
-                try {
-                    appState = Object.assign(appState, JSON.parse(saved));
-                } catch(e) { console.error("Errore caricamento stato", e); }
+                try { appState = Object.assign(appState, JSON.parse(saved)); } 
+                catch(e) { console.error(e); }
             }
         }
 
@@ -453,16 +441,13 @@
             updateDashboard();
         }
 
-        function showWelcomeModal() {
-            document.getElementById("welcomeOverlay").style.display = "flex";
-        }
+        function showWelcomeModal() { document.getElementById("welcomeOverlay").style.display = "flex"; }
 
         function selectUserProfile(name, color, customGreeting) {
             appState.userName = name;
             appState.userColor = color;
             appState.userCustomGreeting = customGreeting;
             saveState();
-            
             applyUserProfile();
             document.getElementById("welcomeOverlay").style.display = "none";
         }
@@ -483,7 +468,7 @@
                         if (!appState.topicsData[t]) {
                             appState.topicsData[t] = {
                                 subject: sub, status: 'todo', priority: 'med',
-                                lastReviewed: null, nextReview: null, notes: ''
+                                nextReview: null, notes: ''
                             };
                         }
                     });
@@ -491,10 +476,15 @@
             }
         }
 
+        function toggleUnit(unitKey) {
+            appState.collapsedUnits[unitKey] = !appState.collapsedUnits[unitKey];
+            saveState();
+            renderSyllabus();
+        }
+
         function renderSyllabus() {
             const container = document.getElementById("syllabusContainer");
             container.innerHTML = "";
-
             const dueTodayContainer = document.getElementById("dueTodayList");
             dueTodayContainer.innerHTML = "";
             let dueTodayCount = 0;
@@ -508,29 +498,40 @@
 
                 initialSyllabus[sub].forEach(u => {
                     const uCard = document.createElement("div");
-                    uCard.className = "card unit-card";
+                    uCard.className = "card";
+                    uCard.style.padding = "0.75rem";
+
+                    const isCollapsed = !!appState.collapsedUnits[u.unit];
 
                     const uHeader = document.createElement("div");
                     uHeader.className = "unit-header";
-                    uHeader.innerHTML = `<span>${u.unit}</span> <i class="fa-solid fa-chevron-down"></i>`;
+                    uHeader.onclick = () => toggleUnit(u.unit);
+                    uHeader.innerHTML = `<span>${u.unit}</span> <i class="fa-solid fa-chevron-${isCollapsed ? 'down' : 'up'}"></i>`;
                     
                     const topicList = document.createElement("div");
-                    topicList.className = "topic-list";
+                    topicList.className = `topic-list ${isCollapsed ? 'collapsed' : ''}`;
 
-                    u.topics.forEach(t => {
+                    // Ordinamento: prima 'todo' e 'review', poi 'done' in fondo
+                    const sortedTopics = [...u.topics].sort((a, b) => {
+                        const statusA = appState.topicsData[a]?.status === 'done' ? 1 : 0;
+                        const statusB = appState.topicsData[b]?.status === 'done' ? 1 : 0;
+                        return statusA - statusB;
+                    });
+
+                    sortedTopics.forEach(t => {
                         const tData = appState.topicsData[t] || {};
                         const item = document.createElement("div");
-                        item.className = "topic-item";
+                        item.className = `topic-item ${tData.status === 'done' ? 'status-done' : ''}`;
 
                         if (tData.nextReview && tData.nextReview <= todayStr && tData.status === 'review') {
                             dueTodayCount++;
-                            dueTodayContainer.innerHTML += `<div style="padding: 0.3rem 0;"><b>[${sub}]</b> ${t}</div>`;
+                            dueTodayContainer.innerHTML += `<div style="padding: 0.2rem 0;"><b>[${sub}]</b> ${t}</div>`;
                         }
 
                         item.innerHTML = `
                             <div class="topic-info">
                                 <span class="priority-badge priority-${tData.priority || 'med'}"></span>
-                                <span style="font-size: 0.95rem; font-weight: 500;">${t}</span>
+                                <span class="topic-text" style="font-size: 0.95rem; font-weight: 500;">${t}</span>
                             </div>
                             <div class="topic-controls">
                                 <select onchange="updateTopicPriority('${t}', this.value)">
@@ -542,10 +543,10 @@
                                 <select onchange="updateTopicStatus('${t}', this.value)">
                                     <option value="todo" ${tData.status==='todo'?'selected':''}>Da Studiare</option>
                                     <option value="review" ${tData.status==='review'?'selected':''}>In Ripasso</option>
-                                    <option value="done" ${tData.status==='done'?'selected':''}>Completato</option>
+                                    <option value="done" ${tData.status==='done'?'selected':''}>Completato ✅</option>
                                 </select>
 
-                                <input type="text" placeholder="Note..." value="${tData.notes || ''}" onchange="updateTopicNotes('${t}', this.value)" style="width: 140px;">
+                                <input type="text" placeholder="Note..." value="${tData.notes || ''}" onchange="updateTopicNotes('${t}', this.value)" style="width: 130px;">
                             </div>
                         `;
                         topicList.appendChild(item);
@@ -558,7 +559,7 @@
             }
 
             if (dueTodayCount === 0) {
-                dueTodayContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza di ripasso per oggi. Ottimo lavoro!</p>`;
+                dueTodayContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza oggi. Ottimo lavoro!</p>`;
             }
         }
 
@@ -604,6 +605,20 @@
             document.getElementById("studyStreak").innerText = (appState.streak || 0) + " 🔥";
         }
 
+        function setTimerPreset(mins) {
+            if (appState.timerRunning) resetTimer();
+            appState.timerSeconds = parseInt(mins) * 60;
+            document.getElementById("customMinutes").value = "";
+            updateTimerDisplay();
+        }
+
+        function setCustomTimer(mins) {
+            if (!mins || mins <= 0) return;
+            if (appState.timerRunning) resetTimer();
+            appState.timerSeconds = parseInt(mins) * 60;
+            updateTimerDisplay();
+        }
+
         function toggleTimer() {
             if (appState.timerRunning) {
                 clearInterval(appState.timerInterval);
@@ -611,28 +626,21 @@
                 document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
             } else {
                 appState.timerRunning = true;
-                appState.timerLastTimestamp = Date.now();
                 document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-pause"></i> Pausa`;
                 
                 appState.timerInterval = setInterval(() => {
-                    const now = Date.now();
-                    const elapsed = Math.floor((now - appState.timerLastTimestamp) / 1000);
-                    appState.timerLastTimestamp = now;
-
-                    appState.timerSeconds -= elapsed;
-
+                    appState.timerSeconds--;
                     if (appState.timerSeconds <= 0) {
                         clearInterval(appState.timerInterval);
                         appState.timerRunning = false;
-                        appState.timerSeconds = 25 * 60;
-                        alert("Sessione Pomodoro Completata!");
+                        alert("Sessione Completata!");
                         
                         const selectedSub = document.getElementById("timerSubjectSelect").value;
-                        appState.studyHours[selectedSub] = (appState.studyHours[selectedSub] || 0) + 0.42;
+                        const minsDone = parseInt(document.getElementById("timerPreset").value) || 25;
+                        appState.studyHours[selectedSub] = (appState.studyHours[selectedSub] || 0) + (minsDone / 60);
                         updateStudyHoursDisplay();
-                        updateStreak();
                         saveState();
-                        document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
+                        resetTimer();
                     }
                     updateTimerDisplay();
                 }, 1000);
@@ -642,7 +650,8 @@
         function resetTimer() {
             if (appState.timerRunning) clearInterval(appState.timerInterval);
             appState.timerRunning = false;
-            appState.timerSeconds = 25 * 60;
+            const presetMins = parseInt(document.getElementById("timerPreset").value) || 25;
+            appState.timerSeconds = presetMins * 60;
             document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
             updateTimerDisplay();
         }
@@ -660,36 +669,50 @@
             document.getElementById("timePhys").innerText = (appState.studyHours["Fisica"] || 0).toFixed(1) + "h";
         }
 
-        function updateStreak() {
-            const today = new Date().toISOString().split('T')[0];
-            if (appState.lastStudyDate !== today) {
-                appState.streak = (appState.streak || 0) + 1;
-                appState.lastStudyDate = today;
-            }
+        function addCustomFlashcard() {
+            const front = document.getElementById("fcFrontInput").value.trim();
+            const back = document.getElementById("fcBackInput").value.trim();
+            if (!front || !back) { alert("Compila sia la domanda che la risposta!"); return; }
+
+            if (!appState.customFlashcards) appState.customFlashcards = [];
+            appState.customFlashcards.push({ front, back, subject: 'Personalizzata' });
+            saveState();
+
+            document.getElementById("fcFrontInput").value = "";
+            document.getElementById("fcBackInput").value = "";
+            alert("Flashcard salvata con successo!");
         }
 
-        function flipCard() {
-            document.getElementById("flashcardBox").classList.toggle("flipped");
-        }
+        function flipCard() { document.getElementById("flashcardBox").classList.toggle("flipped"); }
 
         function drawRandomFlashcard() {
             document.getElementById("flashcardBox").classList.remove("flipped");
-            const reviewTopics = Object.keys(appState.topicsData).filter(t => appState.topicsData[t].status === 'review' || appState.topicsData[t].status === 'todo');
             
-            if (reviewTopics.length === 0) {
+            let pool = [];
+            if (appState.customFlashcards && appState.customFlashcards.length > 0) {
+                pool = pool.concat(appState.customFlashcards.map(c => ({ title: c.front, notes: c.back, subject: c.subject })));
+            }
+
+            Object.keys(appState.topicsData).forEach(t => {
+                const td = appState.topicsData[t];
+                if (td.status === 'review' || td.status === 'todo') {
+                    pool.push({ title: t, notes: td.notes || "Nessuna nota presente.", subject: td.subject });
+                }
+            });
+
+            if (pool.length === 0) {
                 document.getElementById("fcSubject").innerText = "INFO";
-                document.getElementById("fcTopicTitle").innerText = "Nessun argomento da ripassare!";
-                document.getElementById("fcNotes").innerText = "Imposta degli argomenti su 'In Ripasso' nel Syllabus.";
+                document.getElementById("fcTopicTitle").innerText = "Nessuna carta trovata!";
+                document.getElementById("fcNotes").innerText = "Aggiungi carte manuali o segna argomenti nel syllabus.";
                 return;
             }
 
-            const randomKey = reviewTopics[Math.floor(Math.random() * reviewTopics.length)];
-            const tData = appState.topicsData[randomKey];
+            const card = pool[Math.floor(Math.random() * pool.length)];
 
             setTimeout(() => {
-                document.getElementById("fcSubject").innerText = tData.subject;
-                document.getElementById("fcTopicTitle").innerText = randomKey;
-                document.getElementById("fcNotes").innerText = tData.notes || "Nessuna nota aggiuntiva per questo argomento.";
+                document.getElementById("fcSubject").innerText = card.subject;
+                document.getElementById("fcTopicTitle").innerText = card.title;
+                document.getElementById("fcNotes").innerText = card.notes;
             }, 200);
         }
 
@@ -699,13 +722,7 @@
             const omitted = parseFloat(document.getElementById("simOmitted").value) || 0;
 
             const score = (correct * 1.5) - (wrong * 0.4);
-            const simResult = {
-                date: new Date().toLocaleDateString('it-IT'),
-                score: score.toFixed(1),
-                correct, wrong, omitted
-            };
-
-            appState.simulations.unshift(simResult);
+            appState.simulations.unshift({ date: new Date().toLocaleDateString('it-IT'), score: score.toFixed(1), correct, wrong, omitted });
             saveState();
             renderSimulationsHistory();
         }
@@ -719,12 +736,8 @@
 
             hist.innerHTML = appState.simulations.map(s => `
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 0.5rem 0;">
-                    <div>
-                        <b>Punteggio: ${s.score} pt</b> <span style="font-size: 0.8rem; color: var(--text-muted);">(${s.date})</span>
-                    </div>
-                    <div style="font-size: 0.85rem;">
-                        🟢 ${s.correct} | 🔴 ${s.wrong} | ⚪ ${s.omitted}
-                    </div>
+                    <div><b>Punteggio: ${s.score} pt</b> <span style="font-size: 0.8rem; color: var(--text-muted);">(${s.date})</span></div>
+                    <div style="font-size: 0.85rem;">🟢 ${s.correct} | 🔴 ${s.wrong} | ⚪ ${s.omitted}</div>
                 </div>
             `).join('');
         }
@@ -732,7 +745,6 @@
         function switchTab(tabId) {
             document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
-            
             document.getElementById(tabId).classList.add("active");
             event.currentTarget.classList.add("active");
         }
@@ -754,9 +766,7 @@
                     appState = JSON.parse(e.target.result);
                     saveState();
                     location.reload();
-                } catch(err) {
-                    alert("File di backup non valido!");
-                }
+                } catch(err) { alert("File di backup non valido!"); }
             };
             fileReader.readAsText(event.target.files[0]);
         }
