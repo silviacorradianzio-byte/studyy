@@ -7,6 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Libreria per il rendering delle formule matematiche -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #0f172a;
@@ -202,11 +212,11 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('syllabusTab')"><i class="fa-solid fa-book"></i> Syllabus & Spaced Repetition</button>
-            <button class="tab-btn" onclick="switchTab('timerTab')"><i class="fa-solid fa-stopwatch"></i> Pomodoro & Ore</button>
-            <button class="tab-btn" onclick="switchTab('flashcardsTab')"><i class="fa-solid fa-layer-group"></i> Flashcards</button>
-            <button class="tab-btn" onclick="switchTab('simulationsTab')"><i class="fa-solid fa-chart-line"></i> Simulazioni Quiz</button>
-            <button class="tab-btn" onclick="switchTab('formulasTab')"><i class="fa-solid fa-square-root-variable"></i> Formulario</button>
+            <button class="tab-btn active" onclick="switchTab(this, 'syllabusTab')"><i class="fa-solid fa-book"></i> Syllabus & Spaced Repetition</button>
+            <button class="tab-btn" onclick="switchTab(this, 'timerTab')"><i class="fa-solid fa-stopwatch"></i> Pomodoro & Ore</button>
+            <button class="tab-btn" onclick="switchTab(this, 'flashcardsTab')"><i class="fa-solid fa-layer-group"></i> Flashcards</button>
+            <button class="tab-btn" onclick="switchTab(this, 'simulationsTab')"><i class="fa-solid fa-chart-line"></i> Simulazioni Quiz</button>
+            <button class="tab-btn" onclick="switchTab(this, 'formulasTab')"><i class="fa-solid fa-square-root-variable"></i> Formulario</button>
         </div>
 
         <!-- TAB 1: SYLLABUS -->
@@ -269,7 +279,7 @@
         <div id="flashcardsTab" class="tab-content">
             <!-- CREA NUOVA FLASHCARD -->
             <div class="card" style="max-width: 600px; margin: 0 auto 1.5rem auto;">
-                <h3><i class="fa-solid fa-plus-circle"></i> Crea Nuova Flashcard</h3>
+                <h3><i class="fa-solid fa-plus-circle"></i> Crea Nuova Flashcard Personalizzata</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
                     <input type="text" id="fcFrontInput" placeholder="Domanda / Concetto (Fronte)">
                     <input type="text" id="fcBackInput" placeholder="Risposta / Spiegazione (Retro)">
@@ -280,7 +290,16 @@
             <!-- ESTRAI E RIPASSA -->
             <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
                 <h3><i class="fa-solid fa-shuffle"></i> Flashcard Active Recall</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Estrai una carta casuale (dalla lista creata o dai tuoi argomenti in ripasso)</p>
+                
+                <!-- SELETTORE ORIGINE FLASHCARD -->
+                <div style="margin-top: 0.75rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem;">Origine carte:</label>
+                    <select id="fcSourceSelect">
+                        <option value="custom">Solo Personalizzate</option>
+                        <option value="syllabus_all">Syllabus (Tutti gli argomenti)</option>
+                        <option value="syllabus_review">Syllabus (Solo da Ripassare)</option>
+                    </select>
+                </div>
 
                 <div class="flashcard-box" id="flashcardBox" onclick="flipCard()">
                     <div class="flashcard-inner">
@@ -404,6 +423,7 @@
             userCustomGreeting: '',
             topicsData: {},
             timerSeconds: 25 * 60,
+            activeSessionDurationMinutes: 25,
             timerRunning: false,
             timerInterval: null,
             studyHours: { "Biologia": 0, "Chimica": 0, "Fisica": 0 },
@@ -511,7 +531,6 @@
                     const topicList = document.createElement("div");
                     topicList.className = `topic-list ${isCollapsed ? 'collapsed' : ''}`;
 
-                    // Ordinamento: prima 'todo' e 'review', poi 'done' in fondo
                     const sortedTopics = [...u.topics].sort((a, b) => {
                         const statusA = appState.topicsData[a]?.status === 'done' ? 1 : 0;
                         const statusB = appState.topicsData[b]?.status === 'done' ? 1 : 0;
@@ -607,7 +626,9 @@
 
         function setTimerPreset(mins) {
             if (appState.timerRunning) resetTimer();
-            appState.timerSeconds = parseInt(mins) * 60;
+            const parsedMins = parseInt(mins);
+            appState.timerSeconds = parsedMins * 60;
+            appState.activeSessionDurationMinutes = parsedMins;
             document.getElementById("customMinutes").value = "";
             updateTimerDisplay();
         }
@@ -615,7 +636,9 @@
         function setCustomTimer(mins) {
             if (!mins || mins <= 0) return;
             if (appState.timerRunning) resetTimer();
-            appState.timerSeconds = parseInt(mins) * 60;
+            const parsedMins = parseInt(mins);
+            appState.timerSeconds = parsedMins * 60;
+            appState.activeSessionDurationMinutes = parsedMins;
             updateTimerDisplay();
         }
 
@@ -636,7 +659,7 @@
                         alert("Sessione Completata!");
                         
                         const selectedSub = document.getElementById("timerSubjectSelect").value;
-                        const minsDone = parseInt(document.getElementById("timerPreset").value) || 25;
+                        const minsDone = appState.activeSessionDurationMinutes || 25;
                         appState.studyHours[selectedSub] = (appState.studyHours[selectedSub] || 0) + (minsDone / 60);
                         updateStudyHoursDisplay();
                         saveState();
@@ -650,8 +673,8 @@
         function resetTimer() {
             if (appState.timerRunning) clearInterval(appState.timerInterval);
             appState.timerRunning = false;
-            const presetMins = parseInt(document.getElementById("timerPreset").value) || 25;
-            appState.timerSeconds = presetMins * 60;
+            const currentMins = appState.activeSessionDurationMinutes || 25;
+            appState.timerSeconds = currentMins * 60;
             document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
             updateTimerDisplay();
         }
@@ -687,23 +710,32 @@
 
         function drawRandomFlashcard() {
             document.getElementById("flashcardBox").classList.remove("flipped");
+            const sourceMode = document.getElementById("fcSourceSelect").value;
             
             let pool = [];
-            if (appState.customFlashcards && appState.customFlashcards.length > 0) {
-                pool = pool.concat(appState.customFlashcards.map(c => ({ title: c.front, notes: c.back, subject: c.subject })));
-            }
 
-            Object.keys(appState.topicsData).forEach(t => {
-                const td = appState.topicsData[t];
-                if (td.status === 'review' || td.status === 'todo') {
-                    pool.push({ title: t, notes: td.notes || "Nessuna nota presente.", subject: td.subject });
+            if (sourceMode === 'custom') {
+                if (appState.customFlashcards && appState.customFlashcards.length > 0) {
+                    pool = appState.customFlashcards.map(c => ({ title: c.front, notes: c.back, subject: c.subject }));
                 }
-            });
+            } else if (sourceMode === 'syllabus_all') {
+                Object.keys(appState.topicsData).forEach(t => {
+                    const td = appState.topicsData[t];
+                    pool.push({ title: t, notes: td.notes || "Nessuna nota aggiuntiva presente.", subject: td.subject });
+                });
+            } else if (sourceMode === 'syllabus_review') {
+                Object.keys(appState.topicsData).forEach(t => {
+                    const td = appState.topicsData[t];
+                    if (td.status === 'review') {
+                        pool.push({ title: t, notes: td.notes || "Nessuna nota aggiuntiva presente.", subject: td.subject });
+                    }
+                });
+            }
 
             if (pool.length === 0) {
                 document.getElementById("fcSubject").innerText = "INFO";
                 document.getElementById("fcTopicTitle").innerText = "Nessuna carta trovata!";
-                document.getElementById("fcNotes").innerText = "Aggiungi carte manuali o segna argomenti nel syllabus.";
+                document.getElementById("fcNotes").innerText = "Non ci sono carte disponibili per la modalità selezionata.";
                 return;
             }
 
@@ -742,11 +774,11 @@
             `).join('');
         }
 
-        function switchTab(tabId) {
+        function switchTab(btnElement, tabId) {
             document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
             document.getElementById(tabId).classList.add("active");
-            event.currentTarget.classList.add("active");
+            if (btnElement) btnElement.classList.add("active");
         }
 
         function exportData() {
