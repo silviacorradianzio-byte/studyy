@@ -3,74 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Studio Scienza</title>
+  <title>Studio Medicina</title>
 
-  <!-- Meta Tag iOS per Web App da Schermata Home -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Studio Scienza">
+  <meta name="apple-mobile-web-app-title" content="MedStudio">
 
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
+      --bg: #090d16;
+      --card-bg: #151c2c;
       --accent: #6366f1;
+      --accent-light: #818cf8;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --border: #334155;
+      --border: #26334d;
       --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bio-color: #10b981;
+      --fis-color: #06b6d4;
+      --chi-color: #f59e0b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
-      padding: calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 30px) 16px;
+      padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 30px) 16px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      gap: 14px;
     }
 
     header {
-      padding: 8px 0 16px 0;
       text-align: center;
+      padding: 4px 0;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       background: linear-gradient(135deg, #a5b4fc, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .progress-card {
+    /* Countdown Card */
+    .countdown-card {
+      background: linear-gradient(135deg, #1e1b4b, #151c2c);
+      border: 1px solid #3730a3;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .countdown-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #a5b4fc;
+      font-weight: 600;
+    }
+
+    .countdown-timer {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 4px 0;
+      color: #fff;
+    }
+
+    .countdown-pace {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .countdown-pace strong {
+      color: #38bdf8;
+    }
+
+    /* Pomodoro Timer Card */
+    .pomodoro-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pomo-header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+    }
+
+    .pomo-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .pomo-display {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 1px;
+    }
+
+    .pomo-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .pomo-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .pomo-btn-start { background: var(--accent); color: white; }
+    .pomo-btn-pause { background: var(--warning); color: black; }
+    .pomo-btn-reset { background: var(--border); color: var(--text-muted); }
+
+    .pomo-settings {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      font-size: 0.75rem;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .pomo-settings input {
+      width: 45px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-align: center;
+      border-radius: 6px;
+      padding: 4px;
+    }
+
+    /* Tabs Materie */
+    .subject-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--bg);
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .tab-btn[data-sub="Biologia"].active { color: var(--bio-color); border-bottom: 2px solid var(--bio-color); }
+    .tab-btn[data-sub="Fisica"].active { color: var(--fis-color); border-bottom: 2px solid var(--fis-color); }
+    .tab-btn[data-sub="Chimica"].active { color: var(--chi-color); border-bottom: 2px solid var(--chi-color); }
+
+    /* Progress Bar */
+    .progress-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
     }
 
     .progress-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
     .progress-bg {
       background: var(--border);
-      height: 8px;
+      height: 7px;
       border-radius: 10px;
       overflow: hidden;
     }
@@ -82,90 +226,72 @@
       transition: width 0.3s ease;
     }
 
+    /* Task List */
     .task-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex: 1;
+      gap: 10px;
     }
 
     .task-item {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .task-main {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .task-item.completed {
-      opacity: 0.5;
-    }
-
-    .checkbox {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
       flex-shrink: 0;
       margin-top: 2px;
-      cursor: pointer;
     }
 
-    .task-item.completed .checkbox {
-      background: var(--success);
-      border-color: var(--success);
-    }
+    .status-0 { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid #475569; }
+    .status-1 { background: rgba(245, 158, 11, 0.15); color: #fba11d; border: 1px solid #b45309; }
+    .status-2 { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid #4338ca; }
+    .status-3 { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #047857; }
 
-    .checkbox::after {
-      content: '✓';
-      color: white;
-      font-size: 13px;
-      font-weight: bold;
-      display: none;
-    }
-
-    .task-item.completed .checkbox::after {
-      display: block;
-    }
-
-    .task-body {
-      flex: 1;
-    }
+    .task-body { flex: 1; }
 
     .task-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 500;
       line-height: 1.3;
     }
 
-    .task-item.completed .task-title {
-      text-decoration: line-through;
-    }
-
     .task-tag {
       display: inline-block;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
-      margin-top: 6px;
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
+      margin-top: 4px;
       text-transform: uppercase;
     }
 
+    .tag-Biologia { background: rgba(16, 185, 129, 0.15); color: var(--bio-color); }
+    .tag-Fisica { background: rgba(6, 182, 212, 0.15); color: var(--fis-color); }
+    .tag-Chimica { background: rgba(245, 158, 11, 0.15); color: var(--chi-color); }
+
     .task-note {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 6px;
       background: rgba(0,0,0,0.25);
-      padding: 8px;
+      padding: 6px 8px;
       border-radius: 6px;
       border-left: 2px solid var(--accent);
     }
@@ -173,31 +299,42 @@
     .del-btn {
       background: none;
       border: none;
-      color: #ef4444;
-      font-size: 1.2rem;
+      color: var(--danger);
+      font-size: 1.1rem;
       padding: 0 4px;
       cursor: pointer;
       opacity: 0.7;
     }
 
+    /* Section Header Toggle */
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Form */
     .add-form {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
     }
 
-    .add-form input, .add-form select {
+    .add-form input, .add-form select, .add-form textarea {
       background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 0.9rem;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
       outline: none;
     }
 
@@ -205,20 +342,53 @@
       background: var(--accent);
       color: white;
       border: none;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 11px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       cursor: pointer;
+    }
+
+    /* Formulario Quick Notes */
+    .formulas-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .formula-item {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .formula-title {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #38bdf8;
+    }
+
+    .formula-body {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
 
     .reset-btn {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 0.8rem;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
       cursor: pointer;
       width: 100%;
     }
@@ -227,12 +397,45 @@
 <body>
 
   <header>
-    <h1>Registro Studio Scientifico</h1>
+    <h1>MedStudio — Semestre Aperto</h1>
   </header>
 
+  <!-- Countdown Card -->
+  <div class="countdown-card">
+    <div class="countdown-title">Countdown Primo Esame (10 Dicembre)</div>
+    <div class="countdown-timer" id="countdownDisplay">--g --h</div>
+    <div class="countdown-pace" id="countdownPace">Caricamento ritmo di studio...</div>
+  </div>
+
+  <!-- Pomodoro Timer -->
+  <div class="pomodoro-card">
+    <div class="pomo-header">
+      <span class="pomo-title">Timer Pomodoro</span>
+      <span class="pomo-title" id="pomoModeText">Studio (25m)</span>
+    </div>
+    <div class="pomo-display" id="pomoDisplay">25:00</div>
+    <div class="pomo-controls">
+      <button class="pomo-btn pomo-btn-start" id="pomoStartBtn" onclick="togglePomodoro()">Avvia</button>
+      <button class="pomo-btn pomo-btn-reset" onclick="resetPomodoro()">Reset</button>
+    </div>
+    <div class="pomo-settings">
+      Studio: <input type="number" id="workMinInput" value="25" min="1" max="120" onchange="updatePomoSettings()">m |
+      Pausa: <input type="number" id="breakMinInput" value="5" min="1" max="60" onchange="updatePomoSettings()">m
+    </div>
+  </div>
+
+  <!-- Filtro Materie -->
+  <div class="subject-tabs">
+    <button class="tab-btn active" data-sub="Tutti" onclick="setSubjectFilter('Tutti')">Tutti</button>
+    <button class="tab-btn" data-sub="Biologia" onclick="setSubjectFilter('Biologia')">Biologia</button>
+    <button class="tab-btn" data-sub="Fisica" onclick="setSubjectFilter('Fisica')">Fisica</button>
+    <button class="tab-btn" data-sub="Chimica" onclick="setSubjectFilter('Chimica')">Chimica</button>
+  </div>
+
+  <!-- Barra Progresso -->
   <div class="progress-card">
     <div class="progress-header">
-      <span>Avanzamento Globale</span>
+      <span id="progressLabel">Avanzamento Padroneggiato</span>
       <span id="progressText">0%</span>
     </div>
     <div class="progress-bg">
@@ -240,82 +443,245 @@
     </div>
   </div>
 
+  <!-- Lista Task -->
   <div class="task-list" id="taskList"></div>
 
+  <!-- Form Nuovo Argomento -->
+  <div class="section-title">Aggiungi Nuovo Argomento</div>
   <form class="add-form" id="addForm">
-    <input type="text" id="taskInput" placeholder="Nuovo argomento (es. Integrali)" required>
+    <input type="text" id="taskInput" placeholder="Nome argomento (es. Ciclo di Krebs)" required>
     <select id="subjectInput">
-      <option value="Matematica">Matematica</option>
+      <option value="Biologia">Biologia</option>
       <option value="Fisica">Fisica</option>
       <option value="Chimica">Chimica</option>
-      <option value="Biologia">Biologia</option>
     </select>
-    <input type="text" id="noteInput" placeholder="Formula o regola chiave (opzionale)">
-    <button type="submit">+ Aggiungi all'Elenco</button>
+    <input type="text" id="noteInput" placeholder="Note o punti chiave (opzionale)">
+    <button type="submit">+ Aggiungi al Programma</button>
   </form>
 
-  <button class="reset-btn" onclick="resetSpunte()">Azzera solo le spunte</button>
+  <!-- Formulario / Prontuario Veloce -->
+  <div class="section-title">
+    <span>Prontuario / Formule Veloce</span>
+  </div>
+  <div class="formulas-card">
+    <div id="formulasList"></div>
+    <form id="addFormulaForm" style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+      <input type="text" id="formulaTitle" placeholder="Titolo (es. Elettrostati - Legge di Coulomb)" required style="background:var(--bg); border:1px solid var(--border); color:var(--text); padding:8px; border-radius:6px; font-size:0.8rem;">
+      <input type="text" id="formulaBody" placeholder="Formula o regola mnemonica" required style="background:var(--bg); border:1px solid var(--border); color:var(--text); padding:8px; border-radius:6px; font-size:0.8rem;">
+      <button type="submit" style="background:var(--border); color:var(--text); border:none; padding:8px; border-radius:6px; font-weight:600; font-size:0.78rem; cursor:pointer;">+ Salva nel Prontuario</button>
+    </form>
+  </div>
+
+  <button class="reset-btn" onclick="resetSpunte()">Azzera gli stati (riparti da "Da Fare")</button>
 
   <script>
-    const initialTasks = [
-      { id: 1, text: "Calcolo Derivate Fondamentali", subject: "Matematica", note: "D[x^n] = n*x^(n-1)", done: false },
-      { id: 2, text: "Leggi della Dinamica di Newton", subject: "Fisica", note: "F = m * a", done: false },
-      { id: 3, text: "Bilanciamento Reazioni Redox", subject: "Chimica", note: "Verifica lo scambio di elettroni", done: false }
+    const STATUS_MAP = [
+      { label: "⚪ Da Fare", class: "status-0" },
+      { label: "🟡 Letto", class: "status-1" },
+      { label: "🟠 Imparato", class: "status-2" },
+      { label: "🟢 Padroneggiato", class: "status-3" }
     ];
 
-    let tasks = JSON.parse(localStorage.getItem('study_checklist_db')) || initialTasks;
+    const initialTasks = [
+      { id: 1, text: "Trascrizione e Splicing dell'RNA", subject: "Biologia", note: "Introni rimossi, esoni saldati insieme", status: 0 },
+      { id: 2, text: "Fluidodinamica: Equazione di Scontinuità e Bernoulli", subject: "Fisica", note: "Q = A * v = costante", status: 0 },
+      { id: 3, text: "Tamponi PH e Equazione di Henderson-Hasselbalch", subject: "Chimica", note: "pH = pKa + log([A-]/[HA])", status: 0 }
+    ];
 
-    const taskList = document.getElementById('taskList');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
+    const initialFormulas = [
+      { id: 1, title: "Fisica — Pressione Idrostatica (Stevino)", body: "P = P0 + d * g * h" },
+      { id: 2, title: "Chimica — Equazione dei Gas Perfetti", body: "P * V = n * R * T" }
+    ];
 
+    let tasks = JSON.parse(localStorage.getItem('med_tasks_db')) || initialTasks;
+    let formulas = JSON.parse(localStorage.getItem('med_formulas_db')) || initialFormulas;
+    let currentFilter = 'Tutti';
+
+    /* COUNTDOWN EXAM */
+    function updateCountdown() {
+      const examDate = new Date('2026-12-10T09:00:00');
+      const now = new Date();
+      const diffMs = examDate - now;
+
+      if(diffMs <= 0) {
+        document.getElementById('countdownDisplay').innerText = "Giorno dell'Esame!";
+        document.getElementById('countdownPace').innerText = "In bocca al lupo!";
+        return;
+      }
+
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      document.getElementById('countdownDisplay').innerText = `${days}g ${hours}h`;
+
+      const unmastered = tasks.filter(t => t.status < 3).length;
+      if (days > 0) {
+        const pace = (unmastered / days).toFixed(1);
+        document.getElementById('countdownPace').innerHTML = `Mancano <strong>${unmastered}</strong> argomenti non padroneggiati $\rightarrow$ Ritmo: <strong>${pace}</strong>/giorno`;
+      } else {
+        document.getElementById('countdownPace').innerHTML = `Ultimi ripassi finali!`;
+      }
+    }
+
+    /* POMODORO TIMER */
+    let pomoWorkMin = 25;
+    let pomoBreakMin = 5;
+    let pomoTimeLeft = pomoWorkMin * 60;
+    let pomoIsRunning = false;
+    let pomoIsWork = true;
+    let pomoTimerId = null;
+
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.6);
+      } catch(e) {}
+    }
+
+    function updatePomoDisplay() {
+      const m = Math.floor(pomoTimeLeft / 60).toString().padStart(2, '0');
+      const s = (pomoTimeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('pomoDisplay').innerText = `${m}:${s}`;
+    }
+
+    function togglePomodoro() {
+      const btn = document.getElementById('pomoStartBtn');
+      if(pomoIsRunning) {
+        clearInterval(pomoTimerId);
+        pomoIsRunning = false;
+        btn.innerText = "Riprendi";
+        btn.className = "pomo-btn pomo-btn-start";
+      } else {
+        pomoIsRunning = true;
+        btn.innerText = "Pausa";
+        btn.className = "pomo-btn pomo-btn-pause";
+        pomoTimerId = setInterval(() => {
+          if(pomoTimeLeft > 0) {
+            pomoTimeLeft--;
+            updatePomoDisplay();
+          } else {
+            playBeep();
+            pomoIsWork = !pomoIsWork;
+            pomoTimeLeft = (pomoIsWork ? pomoWorkMin : pomoBreakMin) * 60;
+            document.getElementById('pomoModeText').innerText = pomoIsWork ? `Studio (${pomoWorkMin}m)` : `Pausa (${pomoBreakMin}m)`;
+            alert(pomoIsWork ? "Pausa finita! Si torna a studiare 💪" : "Tempo scaduto! Fai una pausa ☕");
+            updatePomoDisplay();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetPomodoro() {
+      clearInterval(pomoTimerId);
+      pomoIsRunning = false;
+      pomoIsWork = true;
+      pomoTimeLeft = pomoWorkMin * 60;
+      document.getElementById('pomoStartBtn').innerText = "Avvia";
+      document.getElementById('pomoStartBtn').className = "pomo-btn pomo-btn-start";
+      document.getElementById('pomoModeText').innerText = `Studio (${pomoWorkMin}m)`;
+      updatePomoDisplay();
+    }
+
+    function updatePomoSettings() {
+      pomoWorkMin = parseInt(document.getElementById('workMinInput').value) || 25;
+      pomoBreakMin = parseInt(document.getElementById('breakMinInput').value) || 5;
+      resetPomodoro();
+    }
+
+    /* TASKS & RENDER */
     function saveAndRender() {
-      localStorage.setItem('study_checklist_db', JSON.stringify(tasks));
+      localStorage.setItem('med_tasks_db', JSON.stringify(tasks));
+      localStorage.setItem('med_formulas_db', JSON.stringify(formulas));
+      render();
+      updateCountdown();
+    }
+
+    function setSubjectFilter(sub) {
+      currentFilter = sub;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-sub') === sub);
+      });
       render();
     }
 
+    function cycleStatus(id) {
+      tasks = tasks.map(t => t.id === id ? {...t, status: (t.status + 1) % 4} : t);
+      saveAndRender();
+    }
+
+    function removeTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    }
+
+    function removeFormula(id) {
+      formulas = formulas.filter(f => f.id !== id);
+      saveAndRender();
+    }
+
+    function resetSpunte() {
+      if(confirm("Vuoi riportare tutti gli argomenti allo stato 'Da Fare'?")) {
+        tasks = tasks.map(t => ({...t, status: 0}));
+        saveAndRender();
+      }
+    }
+
     function render() {
+      const taskList = document.getElementById('taskList');
       taskList.innerHTML = '';
-      let doneCount = 0;
 
-      tasks.forEach(task => {
-        if(task.done) doneCount++;
+      const filtered = currentFilter === 'Tutti' ? tasks : tasks.filter(t => t.subject === currentFilter);
 
+      filtered.forEach(task => {
+        const st = STATUS_MAP[task.status];
         const item = document.createElement('div');
-        item.className = `task-item ${task.done ? 'completed' : ''}`;
+        item.className = 'task-item';
         item.innerHTML = `
-          <div class="checkbox" onclick="toggle(${task.id})"></div>
-          <div class="task-body">
-            <div class="task-title" onclick="toggle(${task.id})">${task.text}</div>
-            <span class="task-tag">${task.subject}</span>
-            ${task.note ? `<div class="task-note">${task.note}</div>` : ''}
+          <div class="task-main">
+            <span class="status-badge ${st.class}" onclick="cycleStatus(${task.id})">${st.label}</span>
+            <div class="task-body">
+              <div class="task-title">${task.text}</div>
+              <span class="task-tag tag-${task.subject}">${task.subject}</span>
+            </div>
+            <button class="del-btn" onclick="removeTask(${task.id})">✕</button>
           </div>
-          <button class="del-btn" onclick="removeTask(${task.id})">✕</button>
+          ${task.note ? `<div class="task-note">${task.note}</div>` : ''}
         `;
         taskList.appendChild(item);
       });
 
-      const pct = tasks.length === 0 ? 0 : Math.round((doneCount / tasks.length) * 100);
-      progressBar.style.width = pct + '%';
-      progressText.innerText = pct + '%';
+      // Progress calculation based on status 3 (Padroneggiato)
+      const targetTasks = currentFilter === 'Tutti' ? tasks : tasks.filter(t => t.subject === currentFilter);
+      const masteredCount = targetTasks.filter(t => t.status === 3).length;
+      const pct = targetTasks.length === 0 ? 0 : Math.round((masteredCount / targetTasks.length) * 100);
+
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressText').innerText = pct + '%';
+      document.getElementById('progressLabel').innerText = currentFilter === 'Tutti' ? 'Avanzamento Globale (🟢 Padroneggiati)' : `Avanzamento ${currentFilter} (🟢 Padroneggiati)`;
+
+      // Render Formulas
+      const fList = document.getElementById('formulasList');
+      fList.innerHTML = '';
+      formulas.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'formula-item';
+        div.innerHTML = `
+          <div>
+            <div class="formula-title">${f.title}</div>
+            <div class="formula-body">${f.body}</div>
+          </div>
+          <button class="del-btn" onclick="removeFormula(${f.id})">✕</button>
+        `;
+        fList.appendChild(div);
+      });
     }
-
-    window.toggle = function(id) {
-      tasks = tasks.map(t => t.id === id ? {...t, done: !t.done} : t);
-      saveAndRender();
-    };
-
-    window.removeTask = function(id) {
-      tasks = tasks.filter(t => t.id !== id);
-      saveAndRender();
-    };
-
-    window.resetSpunte = function() {
-      if(confirm("Vuoi togliere tutte le spunte per iniziare una nuova sessione?")) {
-        tasks = tasks.map(t => ({...t, done: false}));
-        saveAndRender();
-      }
-    };
 
     document.getElementById('addForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -324,14 +690,30 @@
       const note = document.getElementById('noteInput').value.trim();
 
       if(text) {
-        tasks.push({ id: Date.now(), text, subject, note, done: false });
+        tasks.push({ id: Date.now(), text, subject, note, status: 0 });
         document.getElementById('taskInput').value = '';
         document.getElementById('noteInput').value = '';
         saveAndRender();
       }
     });
 
-    render();
+    document.getElementById('addFormulaForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('formulaTitle').value.trim();
+      const body = document.getElementById('formulaBody').value.trim();
+
+      if(title && body) {
+        formulas.push({ id: Date.now(), title, body });
+        document.getElementById('formulaTitle').value = '';
+        document.getElementById('formulaBody').value = '';
+        saveAndRender();
+      }
+    });
+
+    updatePomoDisplay();
+    setInterval(updateCountdown, 60000);
+    saveAndRender();
   </script>
 </body>
 </html>
+
