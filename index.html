@@ -7,13 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Libreria per il rendering delle formule matematiche -->
+    <!-- Rendering Formule Matematiche MathJax -->
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
         };
     </script>
     
@@ -108,8 +106,8 @@
             border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem;
             display: flex; flex-direction: column; gap: 0.5rem; transition: opacity 0.3s;
         }
-        .topic-item.status-done { opacity: 0.5; background-color: rgba(0,0,0,0.1); }
-        .topic-item.status-done .topic-text { text-decoration: line-through; }
+        .topic-item.status-done { opacity: 0.7; background-color: rgba(34, 197, 94, 0.05); border-color: var(--success); }
+        .topic-item.status-done .topic-text { text-decoration: line-through; color: var(--text-muted); }
 
         @media (min-width: 640px) {
             .topic-item { flex-direction: row; align-items: center; justify-content: space-between; }
@@ -221,10 +219,22 @@
 
         <!-- TAB 1: SYLLABUS -->
         <div id="syllabusTab" class="tab-content active">
+            <!-- SCHEDA IN SCADENZA OGGI -->
             <div class="card" style="background-color: rgba(255, 41, 134, 0.08); border-color: var(--accent);">
                 <h3><i class="fa-solid fa-clock-rotate-left"></i> In Scadenza di Ripasso Oggi</h3>
                 <div id="dueTodayList" style="margin-top: 0.5rem;">
                     <p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza oggi.</p>
+                </div>
+            </div>
+
+            <!-- SCHEDA ARGOMENTI COMPLETATI -->
+            <div class="card" style="border-color: var(--success); background-color: rgba(34, 197, 94, 0.05);">
+                <div class="unit-header" style="background: transparent; border: none; padding: 0;" onclick="toggleUnit('completedSection')">
+                    <h3 style="color: var(--success);"><i class="fa-solid fa-circle-check"></i> Argomenti Completati (<span id="completedCount">0</span>)</h3>
+                    <i class="fa-solid fa-chevron-down" id="completedChevron"></i>
+                </div>
+                <div id="completedContainer" class="topic-list collapsed" style="margin-top: 1rem;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento completato al momento.</p>
                 </div>
             </div>
 
@@ -278,9 +288,17 @@
         <!-- TAB 3: FLASHCARDS -->
         <div id="flashcardsTab" class="tab-content">
             <!-- CREA NUOVA FLASHCARD -->
-            <div class="card" style="max-width: 600px; margin: 0 auto 1.5rem auto;">
-                <h3><i class="fa-solid fa-plus-circle"></i> Crea Nuova Flashcard Personalizzata</h3>
+            <div class="card" style="max-width: 650px; margin: 0 auto 1.5rem auto;">
+                <h3><i class="fa-solid fa-plus-circle"></i> Crea Nuova Flashcard per Argomento</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                    
+                    <div>
+                        <label style="font-size: 0.8rem; color: var(--text-muted);">Seleziona l'Argomento di riferimento del Syllabus:</label>
+                        <select id="fcTopicSelect" style="width: 100%; margin-top: 0.25rem;">
+                            <!-- Popolato dinamicamente -->
+                        </select>
+                    </div>
+
                     <input type="text" id="fcFrontInput" placeholder="Domanda / Concetto (Fronte)">
                     <input type="text" id="fcBackInput" placeholder="Risposta / Spiegazione (Retro)">
                     <button class="btn" onclick="addCustomFlashcard()"><i class="fa-solid fa-floppy-disk"></i> Salva Flashcard</button>
@@ -288,23 +306,31 @@
             </div>
 
             <!-- ESTRAI E RIPASSA -->
-            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <div class="card" style="max-width: 650px; margin: 0 auto; text-align: center;">
                 <h3><i class="fa-solid fa-shuffle"></i> Flashcard Active Recall</h3>
                 
                 <!-- SELETTORE ORIGINE FLASHCARD -->
-                <div style="margin-top: 0.75rem;">
-                    <label style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem;">Origine carte:</label>
-                    <select id="fcSourceSelect">
-                        <option value="custom">Solo Personalizzate</option>
-                        <option value="syllabus_all">Syllabus (Tutti gli argomenti)</option>
-                        <option value="syllabus_review">Syllabus (Solo da Ripassare)</option>
-                    </select>
+                <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);">Filtra per:</label>
+                        <select id="fcSourceSelect" onchange="toggleFcTopicFilter()">
+                            <option value="all">Tutti gli Argomenti</option>
+                            <option value="custom">Solo Carte Personalizzate</option>
+                            <option value="specific_topic">Argomento Specifico</option>
+                        </select>
+                    </div>
+
+                    <div id="specificTopicFilterContainer" style="display: none; width: 100%; max-width: 400px;">
+                        <select id="fcSpecificTopicSelect" style="width: 100%;">
+                            <!-- Popolato dinamicamente -->
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flashcard-box" id="flashcardBox" onclick="flipCard()">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <span id="fcSubject" class="metric-label" style="text-transform: uppercase;">Materia</span>
+                            <span id="fcSubject" class="metric-label" style="text-transform: uppercase;">ARGOMENTO</span>
                             <h3 id="fcTopicTitle" style="margin-top: 0.5rem;">Clicca per estrarre una carta</h3>
                         </div>
                         <div class="flashcard-back">
@@ -429,7 +455,7 @@
             studyHours: { "Biologia": 0, "Chimica": 0, "Fisica": 0 },
             simulations: [],
             customFlashcards: [],
-            collapsedUnits: {},
+            collapsedUnits: { 'completedSection': true },
             streak: 0,
             theme: 'dark'
         };
@@ -441,6 +467,7 @@
             else applyUserProfile();
 
             renderSyllabus();
+            populateFlashcardTopicSelectors();
             updateDashboard();
             updateTimerDisplay();
             updateStudyHoursDisplay();
@@ -499,15 +526,34 @@
         function toggleUnit(unitKey) {
             appState.collapsedUnits[unitKey] = !appState.collapsedUnits[unitKey];
             saveState();
-            renderSyllabus();
+            
+            if (unitKey === 'completedSection') {
+                const compContainer = document.getElementById("completedContainer");
+                const chevron = document.getElementById("completedChevron");
+                if (appState.collapsedUnits[unitKey]) {
+                    compContainer.classList.add("collapsed");
+                    chevron.className = "fa-solid fa-chevron-down";
+                } else {
+                    compContainer.classList.remove("collapsed");
+                    chevron.className = "fa-solid fa-chevron-up";
+                }
+            } else {
+                renderSyllabus();
+            }
         }
 
         function renderSyllabus() {
             const container = document.getElementById("syllabusContainer");
             container.innerHTML = "";
+            
             const dueTodayContainer = document.getElementById("dueTodayList");
             dueTodayContainer.innerHTML = "";
             let dueTodayCount = 0;
+
+            const completedContainer = document.getElementById("completedContainer");
+            completedContainer.innerHTML = "";
+            let completedCount = 0;
+
             const todayStr = new Date().toISOString().split('T')[0];
 
             for (let sub in initialSyllabus) {
@@ -531,55 +577,81 @@
                     const topicList = document.createElement("div");
                     topicList.className = `topic-list ${isCollapsed ? 'collapsed' : ''}`;
 
-                    const sortedTopics = [...u.topics].sort((a, b) => {
-                        const statusA = appState.topicsData[a]?.status === 'done' ? 1 : 0;
-                        const statusB = appState.topicsData[b]?.status === 'done' ? 1 : 0;
-                        return statusA - statusB;
-                    });
+                    let activeTopicsInUnit = 0;
 
-                    sortedTopics.forEach(t => {
+                    u.topics.forEach(t => {
                         const tData = appState.topicsData[t] || {};
-                        const item = document.createElement("div");
-                        item.className = `topic-item ${tData.status === 'done' ? 'status-done' : ''}`;
+                        const itemHtml = createTopicItemElement(t, tData, sub);
 
-                        if (tData.nextReview && tData.nextReview <= todayStr && tData.status === 'review') {
-                            dueTodayCount++;
-                            dueTodayContainer.innerHTML += `<div style="padding: 0.2rem 0;"><b>[${sub}]</b> ${t}</div>`;
+                        // Se COMPLETATO -> va nella sezione riservata
+                        if (tData.status === 'done') {
+                            completedCount++;
+                            completedContainer.appendChild(itemHtml);
+                        } else {
+                            activeTopicsInUnit++;
+                            // Controllo scadenza ripasso
+                            if (tData.nextReview && tData.nextReview <= todayStr && tData.status === 'review') {
+                                dueTodayCount++;
+                                dueTodayContainer.innerHTML += `<div style="padding: 0.2rem 0;"><b>[${sub}]</b> ${t}</div>`;
+                            }
+                            topicList.appendChild(itemHtml);
                         }
-
-                        item.innerHTML = `
-                            <div class="topic-info">
-                                <span class="priority-badge priority-${tData.priority || 'med'}"></span>
-                                <span class="topic-text" style="font-size: 0.95rem; font-weight: 500;">${t}</span>
-                            </div>
-                            <div class="topic-controls">
-                                <select onchange="updateTopicPriority('${t}', this.value)">
-                                    <option value="low" ${tData.priority==='low'?'selected':''}>🟢 Facile</option>
-                                    <option value="med" ${tData.priority==='med'?'selected':''}>🟡 Medio</option>
-                                    <option value="high" ${tData.priority==='high'?'selected':''}>🔴 Critico</option>
-                                </select>
-
-                                <select onchange="updateTopicStatus('${t}', this.value)">
-                                    <option value="todo" ${tData.status==='todo'?'selected':''}>Da Studiare</option>
-                                    <option value="review" ${tData.status==='review'?'selected':''}>In Ripasso</option>
-                                    <option value="done" ${tData.status==='done'?'selected':''}>Completato ✅</option>
-                                </select>
-
-                                <input type="text" placeholder="Note..." value="${tData.notes || ''}" onchange="updateTopicNotes('${t}', this.value)" style="width: 130px;">
-                            </div>
-                        `;
-                        topicList.appendChild(item);
                     });
 
                     uCard.appendChild(uHeader);
                     uCard.appendChild(topicList);
+
+                    // Mostra la scheda Unità anche se i suoi argomenti sono completati
                     container.appendChild(uCard);
                 });
+            }
+
+            // Aggiorna contatore Sezione Completati
+            document.getElementById("completedCount").innerText = completedCount;
+            if (completedCount === 0) {
+                completedContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento completato al momento.</p>`;
             }
 
             if (dueTodayCount === 0) {
                 dueTodayContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza oggi. Ottimo lavoro!</p>`;
             }
+
+            // Mantiene lo stato aperto/chiuso della sezione completati
+            if (appState.collapsedUnits['completedSection']) {
+                completedContainer.classList.add("collapsed");
+                document.getElementById("completedChevron").className = "fa-solid fa-chevron-down";
+            } else {
+                completedContainer.classList.remove("collapsed");
+                document.getElementById("completedChevron").className = "fa-solid fa-chevron-up";
+            }
+        }
+
+        function createTopicItemElement(t, tData, sub) {
+            const item = document.createElement("div");
+            item.className = `topic-item ${tData.status === 'done' ? 'status-done' : ''}`;
+
+            item.innerHTML = `
+                <div class="topic-info">
+                    <span class="priority-badge priority-${tData.priority || 'med'}"></span>
+                    <span class="topic-text" style="font-size: 0.95rem; font-weight: 500;"><b>[${sub}]</b> ${t}</span>
+                </div>
+                <div class="topic-controls">
+                    <select onchange="updateTopicPriority('${t}', this.value)">
+                        <option value="low" ${tData.priority==='low'?'selected':''}>🟢 Facile</option>
+                        <option value="med" ${tData.priority==='med'?'selected':''}>🟡 Medio</option>
+                        <option value="high" ${tData.priority==='high'?'selected':''}>🔴 Critico</option>
+                    </select>
+
+                    <select onchange="updateTopicStatus('${t}', this.value)">
+                        <option value="todo" ${tData.status==='todo'?'selected':''}>Da Studiare</option>
+                        <option value="review" ${tData.status==='review'?'selected':''}>In Ripasso</option>
+                        <option value="done" ${tData.status==='done'?'selected':''}>Completato ✅</option>
+                    </select>
+
+                    <input type="text" placeholder="Note..." value="${tData.notes || ''}" onchange="updateTopicNotes('${t}', this.value)" style="width: 130px;">
+                </div>
+            `;
+            return item;
         }
 
         function updateTopicStatus(topic, status) {
@@ -602,6 +674,48 @@
         function updateTopicNotes(topic, notes) {
             appState.topicsData[topic].notes = notes;
             saveState();
+        }
+
+        function populateFlashcardTopicSelectors() {
+            const fcSelect = document.getElementById("fcTopicSelect");
+            const filterSelect = document.getElementById("fcSpecificTopicSelect");
+            
+            fcSelect.innerHTML = "";
+            filterSelect.innerHTML = "";
+
+            for (let sub in initialSyllabus) {
+                let group1 = document.createElement("optgroup");
+                group1.label = sub;
+                let group2 = document.createElement("optgroup");
+                group2.label = sub;
+
+                initialSyllabus[sub].forEach(u => {
+                    u.topics.forEach(t => {
+                        let opt1 = document.createElement("option");
+                        opt1.value = t;
+                        opt1.innerText = t;
+                        group1.appendChild(opt1);
+
+                        let opt2 = document.createElement("option");
+                        opt2.value = t;
+                        opt2.innerText = t;
+                        group2.appendChild(opt2);
+                    });
+                });
+
+                fcSelect.appendChild(group1);
+                filterSelect.appendChild(group2);
+            }
+        }
+
+        function toggleFcTopicFilter() {
+            const mode = document.getElementById("fcSourceSelect").value;
+            const container = document.getElementById("specificTopicFilterContainer");
+            if (mode === 'specific_topic') {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
         }
 
         function updateDashboard() {
@@ -693,17 +807,23 @@
         }
 
         function addCustomFlashcard() {
+            const topic = document.getElementById("fcTopicSelect").value;
             const front = document.getElementById("fcFrontInput").value.trim();
             const back = document.getElementById("fcBackInput").value.trim();
+
             if (!front || !back) { alert("Compila sia la domanda che la risposta!"); return; }
 
             if (!appState.customFlashcards) appState.customFlashcards = [];
-            appState.customFlashcards.push({ front, back, subject: 'Personalizzata' });
+            
+            // Trova la materia associata all'argomento
+            const subject = appState.topicsData[topic] ? appState.topicsData[topic].subject : 'Generale';
+
+            appState.customFlashcards.push({ topic, front, back, subject });
             saveState();
 
             document.getElementById("fcFrontInput").value = "";
             document.getElementById("fcBackInput").value = "";
-            alert("Flashcard salvata con successo!");
+            alert("Flashcard aggiunta con successo all'argomento: " + topic);
         }
 
         function flipCard() { document.getElementById("flashcardBox").classList.toggle("flipped"); }
@@ -711,108 +831,10 @@
         function drawRandomFlashcard() {
             document.getElementById("flashcardBox").classList.remove("flipped");
             const sourceMode = document.getElementById("fcSourceSelect").value;
+            const targetTopic = document.getElementById("fcSpecificTopicSelect").value;
             
             let pool = [];
 
             if (sourceMode === 'custom') {
                 if (appState.customFlashcards && appState.customFlashcards.length > 0) {
-                    pool = appState.customFlashcards.map(c => ({ title: c.front, notes: c.back, subject: c.subject }));
-                }
-            } else if (sourceMode === 'syllabus_all') {
-                Object.keys(appState.topicsData).forEach(t => {
-                    const td = appState.topicsData[t];
-                    pool.push({ title: t, notes: td.notes || "Nessuna nota aggiuntiva presente.", subject: td.subject });
-                });
-            } else if (sourceMode === 'syllabus_review') {
-                Object.keys(appState.topicsData).forEach(t => {
-                    const td = appState.topicsData[t];
-                    if (td.status === 'review') {
-                        pool.push({ title: t, notes: td.notes || "Nessuna nota aggiuntiva presente.", subject: td.subject });
-                    }
-                });
-            }
-
-            if (pool.length === 0) {
-                document.getElementById("fcSubject").innerText = "INFO";
-                document.getElementById("fcTopicTitle").innerText = "Nessuna carta trovata!";
-                document.getElementById("fcNotes").innerText = "Non ci sono carte disponibili per la modalità selezionata.";
-                return;
-            }
-
-            const card = pool[Math.floor(Math.random() * pool.length)];
-
-            setTimeout(() => {
-                document.getElementById("fcSubject").innerText = card.subject;
-                document.getElementById("fcTopicTitle").innerText = card.title;
-                document.getElementById("fcNotes").innerText = card.notes;
-            }, 200);
-        }
-
-        function addSimulation() {
-            const correct = parseFloat(document.getElementById("simCorrect").value) || 0;
-            const wrong = parseFloat(document.getElementById("simWrong").value) || 0;
-            const omitted = parseFloat(document.getElementById("simOmitted").value) || 0;
-
-            const score = (correct * 1.5) - (wrong * 0.4);
-            appState.simulations.unshift({ date: new Date().toLocaleDateString('it-IT'), score: score.toFixed(1), correct, wrong, omitted });
-            saveState();
-            renderSimulationsHistory();
-        }
-
-        function renderSimulationsHistory() {
-            const hist = document.getElementById("simulationsHistory");
-            if (!appState.simulations || appState.simulations.length === 0) {
-                hist.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessuna simulazione ancora registrata.</p>`;
-                return;
-            }
-
-            hist.innerHTML = appState.simulations.map(s => `
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 0.5rem 0;">
-                    <div><b>Punteggio: ${s.score} pt</b> <span style="font-size: 0.8rem; color: var(--text-muted);">(${s.date})</span></div>
-                    <div style="font-size: 0.85rem;">🟢 ${s.correct} | 🔴 ${s.wrong} | ⚪ ${s.omitted}</div>
-                </div>
-            `).join('');
-        }
-
-        function switchTab(btnElement, tabId) {
-            document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-            document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
-            document.getElementById(tabId).classList.add("active");
-            if (btnElement) btnElement.classList.add("active");
-        }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `medstudio_backup_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
-
-        function importData(event) {
-            const fileReader = new FileReader();
-            fileReader.onload = function(e) {
-                try {
-                    appState = JSON.parse(e.target.result);
-                    saveState();
-                    location.reload();
-                } catch(err) { alert("File di backup non valido!"); }
-            };
-            fileReader.readAsText(event.target.files[0]);
-        }
-
-        function toggleTheme() {
-            appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
-            applyTheme();
-            saveState();
-        }
-
-        function applyTheme() {
-            document.documentElement.setAttribute('data-theme', appState.theme);
-            document.getElementById("themeBtn").innerHTML = appState.theme === 'dark' ? `<i class="fa-solid fa-sun"></i>` : `<i class="fa-solid fa-moon"></i>`;
-        }
-    </script>
-</body>
-</html>
+                    pool =
