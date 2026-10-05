@@ -1,719 +1,776 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Studio Medicina</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedStudio - Preparazione Medicina</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --border: #475569;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+        }
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="MedStudio">
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
+            --border: #cbd5e1;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --danger: #dc2626;
+        }
 
-  <style>
-    :root {
-      --bg: #090d16;
-      --card-bg: #151c2c;
-      --accent: #6366f1;
-      --accent-light: #818cf8;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #26334d;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --bio-color: #10b981;
-      --fis-color: #06b6d4;
-      --chi-color: #f59e0b;
-    }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-main); line-height: 1.5; padding-bottom: 70px; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+        /* Header Navigation */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+        .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+        
+        .btn {
+            background-color: var(--accent); color: #fff; border: none; padding: 0.5rem 1rem;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-secondary { background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background-color: var(--border); }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 30px) 16px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+        /* Welcome Overlay Modal */
+        .welcome-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(15, 23, 42, 0.95);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; padding: 1rem;
+        }
+        .welcome-card {
+            background-color: var(--bg-secondary); border: 2px solid var(--border);
+            border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%;
+            text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .user-selector { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+        .user-option-btn {
+            padding: 1rem; border-radius: 12px; border: 2px solid transparent;
+            color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: transform 0.2s;
+        }
+        .user-option-btn:hover { transform: scale(1.02); }
 
-    header {
-      text-align: center;
-      padding: 4px 0;
-    }
+        /* Container Layout */
+        .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
 
-    h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #a5b4fc, #6366f1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem;
+        }
+        .tab-btn {
+            background: none; border: none; color: var(--text-muted); padding: 0.75rem 1.25rem;
+            font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 8px 8px 0 0;
+            white-space: nowrap; transition: 0.2s;
+        }
+        .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); background-color: var(--bg-secondary); }
 
-    /* Countdown Card */
-    .countdown-card {
-      background: linear-gradient(135deg, #1e1b4b, #151c2c);
-      border: 1px solid #3730a3;
-      border-radius: 16px;
-      padding: 14px;
-      text-align: center;
-    }
+        /* Cards & Section Containers */
+        .card {
+            background-color: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
 
-    .countdown-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #a5b4fc;
-      font-weight: 600;
-    }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-    .countdown-timer {
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin: 4px 0;
-      color: #fff;
-    }
+        /* Syllabus Accordion & Topic Styles */
+        .subject-title { font-size: 1.3rem; margin-bottom: 1rem; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 0.5rem; }
+        .unit-card { margin-bottom: 1rem; }
+        .unit-header {
+            font-weight: 700; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; padding: 0.75rem 1rem; background-color: var(--bg-card);
+            border-radius: 8px; border: 1px solid var(--border);
+        }
+        .topic-list { margin-top: 0.5rem; padding-left: 0.5rem; }
+        .topic-item {
+            background-color: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        @media (min-width: 640px) {
+            .topic-item { flex-direction: row; align-items: center; justify-content: space-between; }
+        }
+        .topic-info { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+        .topic-controls { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
-    .countdown-pace {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
+        /* Badge & Selects */
+        .priority-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .priority-low { background-color: var(--success); }
+        .priority-med { background-color: var(--warning); }
+        .priority-high { background-color: var(--danger); }
 
-    .countdown-pace strong {
-      color: #38bdf8;
-    }
+        select, input[type="text"], input[type="number"] {
+            background-color: var(--bg-primary); color: var(--text-main);
+            border: 1px solid var(--border); padding: 0.4rem 0.6rem; border-radius: 6px;
+            font-size: 0.85rem;
+        }
 
-    /* Pomodoro Timer Card */
-    .pomodoro-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
+        /* Dashboard Metrics */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .metric-card { text-align: center; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+        .metric-label { font-size: 0.85rem; color: var(--text-muted); }
 
-    .pomo-header {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      align-items: center;
-    }
+        /* Pomodoro Timer */
+        .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--accent); }
+        .timer-controls { display: flex; justify-content: center; gap: 0.75rem; }
 
-    .pomo-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+        /* Flashcard Roulette Flip Card */
+        .flashcard-box { perspective: 1000px; height: 220px; cursor: pointer; margin: 1rem 0; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d; border-radius: 12px;
+        }
+        .flashcard-box.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background-color: var(--bg-card);
+        }
+        .flashcard-back { transform: rotateY(180deg); background-color: var(--bg-secondary); }
 
-    .pomo-display {
-      font-size: 2.2rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 1px;
-    }
+        /* Formula Sheet Grid */
+        .formula-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .formula-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
 
-    .pomo-controls {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .pomo-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    .pomo-btn-start { background: var(--accent); color: white; }
-    .pomo-btn-pause { background: var(--warning); color: black; }
-    .pomo-btn-reset { background: var(--border); color: var(--text-muted); }
-
-    .pomo-settings {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-      font-size: 0.75rem;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-    }
-
-    .pomo-settings input {
-      width: 45px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-align: center;
-      border-radius: 6px;
-      padding: 4px;
-    }
-
-    /* Tabs Materie */
-    .subject-tabs {
-      display: flex;
-      gap: 6px;
-      background: var(--card-bg);
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 8px 4px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.78rem;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
-      background: var(--bg);
-      color: var(--text);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    .tab-btn[data-sub="Biologia"].active { color: var(--bio-color); border-bottom: 2px solid var(--bio-color); }
-    .tab-btn[data-sub="Fisica"].active { color: var(--fis-color); border-bottom: 2px solid var(--fis-color); }
-    .tab-btn[data-sub="Chimica"].active { color: var(--chi-color); border-bottom: 2px solid var(--chi-color); }
-
-    /* Progress Bar */
-    .progress-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .progress-bg {
-      background: var(--border);
-      height: 7px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      background: linear-gradient(90deg, #6366f1, #10b981);
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    /* Task List */
-    .task-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .task-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .task-main {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .status-badge {
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .status-0 { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid #475569; }
-    .status-1 { background: rgba(245, 158, 11, 0.15); color: #fba11d; border: 1px solid #b45309; }
-    .status-2 { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid #4338ca; }
-    .status-3 { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #047857; }
-
-    .task-body { flex: 1; }
-
-    .task-title {
-      font-size: 0.92rem;
-      font-weight: 500;
-      line-height: 1.3;
-    }
-
-    .task-tag {
-      display: inline-block;
-      font-size: 0.62rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
-
-    .tag-Biologia { background: rgba(16, 185, 129, 0.15); color: var(--bio-color); }
-    .tag-Fisica { background: rgba(6, 182, 212, 0.15); color: var(--fis-color); }
-    .tag-Chimica { background: rgba(245, 158, 11, 0.15); color: var(--chi-color); }
-
-    .task-note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      background: rgba(0,0,0,0.25);
-      padding: 6px 8px;
-      border-radius: 6px;
-      border-left: 2px solid var(--accent);
-    }
-
-    .del-btn {
-      background: none;
-      border: none;
-      color: var(--danger);
-      font-size: 1.1rem;
-      padding: 0 4px;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-
-    /* Section Header Toggle */
-    .section-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #a5b4fc;
-      margin-top: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Form */
-    .add-form {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .add-form input, .add-form select, .add-form textarea {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      outline: none;
-    }
-
-    .add-form button {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 11px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.88rem;
-      cursor: pointer;
-    }
-
-    /* Formulario Quick Notes */
-    .formulas-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .formula-item {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .formula-title {
-      font-weight: 600;
-      font-size: 0.82rem;
-      color: #38bdf8;
-    }
-
-    .formula-body {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .reset-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      width: 100%;
-    }
-  </style>
+        @media (max-width: 600px) {
+            .logo span { display: none; }
+            .timer-display { font-size: 2.5rem; }
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>MedStudio — Semestre Aperto</h1>
-  </header>
-
-  <!-- Countdown Card -->
-  <div class="countdown-card">
-    <div class="countdown-title">Countdown Primo Esame (10 Dicembre)</div>
-    <div class="countdown-timer" id="countdownDisplay">--g --h</div>
-    <div class="countdown-pace" id="countdownPace">Caricamento ritmo di studio...</div>
-  </div>
-
-  <!-- Pomodoro Timer -->
-  <div class="pomodoro-card">
-    <div class="pomo-header">
-      <span class="pomo-title">Timer Pomodoro</span>
-      <span class="pomo-title" id="pomoModeText">Studio (25m)</span>
-    </div>
-    <div class="pomo-display" id="pomoDisplay">25:00</div>
-    <div class="pomo-controls">
-      <button class="pomo-btn pomo-btn-start" id="pomoStartBtn" onclick="togglePomodoro()">Avvia</button>
-      <button class="pomo-btn pomo-btn-reset" onclick="resetPomodoro()">Reset</button>
-    </div>
-    <div class="pomo-settings">
-      Studio: <input type="number" id="workMinInput" value="25" min="1" max="120" onchange="updatePomoSettings()">m |
-      Pausa: <input type="number" id="breakMinInput" value="5" min="1" max="60" onchange="updatePomoSettings()">m
-    </div>
-  </div>
-
-  <!-- Filtro Materie -->
-  <div class="subject-tabs">
-    <button class="tab-btn active" data-sub="Tutti" onclick="setSubjectFilter('Tutti')">Tutti</button>
-    <button class="tab-btn" data-sub="Biologia" onclick="setSubjectFilter('Biologia')">Biologia</button>
-    <button class="tab-btn" data-sub="Fisica" onclick="setSubjectFilter('Fisica')">Fisica</button>
-    <button class="tab-btn" data-sub="Chimica" onclick="setSubjectFilter('Chimica')">Chimica</button>
-  </div>
-
-  <!-- Barra Progresso -->
-  <div class="progress-card">
-    <div class="progress-header">
-      <span id="progressLabel">Avanzamento Padroneggiato</span>
-      <span id="progressText">0%</span>
-    </div>
-    <div class="progress-bg">
-      <div class="progress-fill" id="progressBar"></div>
-    </div>
-  </div>
-
-  <!-- Lista Task -->
-  <div class="task-list" id="taskList"></div>
-
-  <!-- Form Nuovo Argomento -->
-  <div class="section-title">Aggiungi Nuovo Argomento</div>
-  <form class="add-form" id="addForm">
-    <input type="text" id="taskInput" placeholder="Nome argomento (es. Ciclo di Krebs)" required>
-    <select id="subjectInput">
-      <option value="Biologia">Biologia</option>
-      <option value="Fisica">Fisica</option>
-      <option value="Chimica">Chimica</option>
-    </select>
-    <input type="text" id="noteInput" placeholder="Note o punti chiave (opzionale)">
-    <button type="submit">+ Aggiungi al Programma</button>
-  </form>
-
-  <!-- Formulario / Prontuario Veloce -->
-  <div class="section-title">
-    <span>Prontuario / Formule Veloce</span>
-  </div>
-  <div class="formulas-card">
-    <div id="formulasList"></div>
-    <form id="addFormulaForm" style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
-      <input type="text" id="formulaTitle" placeholder="Titolo (es. Elettrostati - Legge di Coulomb)" required style="background:var(--bg); border:1px solid var(--border); color:var(--text); padding:8px; border-radius:6px; font-size:0.8rem;">
-      <input type="text" id="formulaBody" placeholder="Formula o regola mnemonica" required style="background:var(--bg); border:1px solid var(--border); color:var(--text); padding:8px; border-radius:6px; font-size:0.8rem;">
-      <button type="submit" style="background:var(--border); color:var(--text); border:none; padding:8px; border-radius:6px; font-weight:600; font-size:0.78rem; cursor:pointer;">+ Salva nel Prontuario</button>
-    </form>
-  </div>
-
-  <button class="reset-btn" onclick="resetSpunte()">Azzera gli stati (riparti da "Da Fare")</button>
-
-  <script>
-    const STATUS_MAP = [
-      { label: "⚪ Da Fare", class: "status-0" },
-      { label: "🟡 Letto", class: "status-1" },
-      { label: "🟠 Imparato", class: "status-2" },
-      { label: "🟢 Padroneggiato", class: "status-3" }
-    ];
-
-    const initialTasks = [
-      { id: 1, text: "Trascrizione e Splicing dell'RNA", subject: "Biologia", note: "Introni rimossi, esoni saldati insieme", status: 0 },
-      { id: 2, text: "Fluidodinamica: Equazione di Scontinuità e Bernoulli", subject: "Fisica", note: "Q = A * v = costante", status: 0 },
-      { id: 3, text: "Tamponi PH e Equazione di Henderson-Hasselbalch", subject: "Chimica", note: "pH = pKa + log([A-]/[HA])", status: 0 }
-    ];
-
-    const initialFormulas = [
-      { id: 1, title: "Fisica — Pressione Idrostatica (Stevino)", body: "P = P0 + d * g * h" },
-      { id: 2, title: "Chimica — Equazione dei Gas Perfetti", body: "P * V = n * R * T" }
-    ];
-
-    let tasks = JSON.parse(localStorage.getItem('med_tasks_db')) || initialTasks;
-    let formulas = JSON.parse(localStorage.getItem('med_formulas_db')) || initialFormulas;
-    let currentFilter = 'Tutti';
-
-    /* COUNTDOWN EXAM */
-    function updateCountdown() {
-      const examDate = new Date('2026-12-10T09:00:00');
-      const now = new Date();
-      const diffMs = examDate - now;
-
-      if(diffMs <= 0) {
-        document.getElementById('countdownDisplay').innerText = "Giorno dell'Esame!";
-        document.getElementById('countdownPace').innerText = "In bocca al lupo!";
-        return;
-      }
-
-      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      document.getElementById('countdownDisplay').innerText = `${days}g ${hours}h`;
-
-      const unmastered = tasks.filter(t => t.status < 3).length;
-      if (days > 0) {
-        const pace = (unmastered / days).toFixed(1);
-        document.getElementById('countdownPace').innerHTML = `Mancano <strong>${unmastered}</strong> argomenti non padroneggiati $\rightarrow$ Ritmo: <strong>${pace}</strong>/giorno`;
-      } else {
-        document.getElementById('countdownPace').innerHTML = `Ultimi ripassi finali!`;
-      }
-    }
-
-    /* POMODORO TIMER */
-    let pomoWorkMin = 25;
-    let pomoBreakMin = 5;
-    let pomoTimeLeft = pomoWorkMin * 60;
-    let pomoIsRunning = false;
-    let pomoIsWork = true;
-    let pomoTimerId = null;
-
-    function playBeep() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.6);
-      } catch(e) {}
-    }
-
-    function updatePomoDisplay() {
-      const m = Math.floor(pomoTimeLeft / 60).toString().padStart(2, '0');
-      const s = (pomoTimeLeft % 60).toString().padStart(2, '0');
-      document.getElementById('pomoDisplay').innerText = `${m}:${s}`;
-    }
-
-    function togglePomodoro() {
-      const btn = document.getElementById('pomoStartBtn');
-      if(pomoIsRunning) {
-        clearInterval(pomoTimerId);
-        pomoIsRunning = false;
-        btn.innerText = "Riprendi";
-        btn.className = "pomo-btn pomo-btn-start";
-      } else {
-        pomoIsRunning = true;
-        btn.innerText = "Pausa";
-        btn.className = "pomo-btn pomo-btn-pause";
-        pomoTimerId = setInterval(() => {
-          if(pomoTimeLeft > 0) {
-            pomoTimeLeft--;
-            updatePomoDisplay();
-          } else {
-            playBeep();
-            pomoIsWork = !pomoIsWork;
-            pomoTimeLeft = (pomoIsWork ? pomoWorkMin : pomoBreakMin) * 60;
-            document.getElementById('pomoModeText').innerText = pomoIsWork ? `Studio (${pomoWorkMin}m)` : `Pausa (${pomoBreakMin}m)`;
-            alert(pomoIsWork ? "Pausa finita! Si torna a studiare 💪" : "Tempo scaduto! Fai una pausa ☕");
-            updatePomoDisplay();
-          }
-        }, 1000);
-      }
-    }
-
-    function resetPomodoro() {
-      clearInterval(pomoTimerId);
-      pomoIsRunning = false;
-      pomoIsWork = true;
-      pomoTimeLeft = pomoWorkMin * 60;
-      document.getElementById('pomoStartBtn').innerText = "Avvia";
-      document.getElementById('pomoStartBtn').className = "pomo-btn pomo-btn-start";
-      document.getElementById('pomoModeText').innerText = `Studio (${pomoWorkMin}m)`;
-      updatePomoDisplay();
-    }
-
-    function updatePomoSettings() {
-      pomoWorkMin = parseInt(document.getElementById('workMinInput').value) || 25;
-      pomoBreakMin = parseInt(document.getElementById('breakMinInput').value) || 5;
-      resetPomodoro();
-    }
-
-    /* TASKS & RENDER */
-    function saveAndRender() {
-      localStorage.setItem('med_tasks_db', JSON.stringify(tasks));
-      localStorage.setItem('med_formulas_db', JSON.stringify(formulas));
-      render();
-      updateCountdown();
-    }
-
-    function setSubjectFilter(sub) {
-      currentFilter = sub;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-sub') === sub);
-      });
-      render();
-    }
-
-    function cycleStatus(id) {
-      tasks = tasks.map(t => t.id === id ? {...t, status: (t.status + 1) % 4} : t);
-      saveAndRender();
-    }
-
-    function removeTask(id) {
-      tasks = tasks.filter(t => t.id !== id);
-      saveAndRender();
-    }
-
-    function removeFormula(id) {
-      formulas = formulas.filter(f => f.id !== id);
-      saveAndRender();
-    }
-
-    function resetSpunte() {
-      if(confirm("Vuoi riportare tutti gli argomenti allo stato 'Da Fare'?")) {
-        tasks = tasks.map(t => ({...t, status: 0}));
-        saveAndRender();
-      }
-    }
-
-    function render() {
-      const taskList = document.getElementById('taskList');
-      taskList.innerHTML = '';
-
-      const filtered = currentFilter === 'Tutti' ? tasks : tasks.filter(t => t.subject === currentFilter);
-
-      filtered.forEach(task => {
-        const st = STATUS_MAP[task.status];
-        const item = document.createElement('div');
-        item.className = 'task-item';
-        item.innerHTML = `
-          <div class="task-main">
-            <span class="status-badge ${st.class}" onclick="cycleStatus(${task.id})">${st.label}</span>
-            <div class="task-body">
-              <div class="task-title">${task.text}</div>
-              <span class="task-tag tag-${task.subject}">${task.subject}</span>
+    <!-- OVERLAY SELEZIONE PROFILO -->
+    <div id="welcomeOverlay" class="welcome-overlay" style="display: none;">
+        <div class="welcome-card">
+            <h2>👋 Benvenuta in MedStudio!</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Chi sta studiando oggi? Seleziona il tuo profilo:</p>
+            
+            <div class="user-selector">
+                <button class="user-option-btn" style="background-color: #ff2986;" onclick="selectUserProfile('SILVIA', '#ff2986', 'ok sei SILVIA prinCESS 👑')">
+                    <span>🌸 SILVIA</span> <i class="fa-solid fa-crown"></i>
+                </button>
+                <button class="user-option-btn" style="background-color: #1e98d9;" onclick="selectUserProfile('GIULIA', '#1e98d9', 'ok GIULIA ma stai calma 🧘‍♀️')">
+                    <span>💙 GIULIA</span> <i class="fa-solid fa-bolt"></i>
+                </button>
+                <button class="user-option-btn" style="background-color: #3cc2a7;" onclick="selectUserProfile('ERIKA', '#3cc2a7', 'ok sei ERIKA programmatrice eccellente 💻')">
+                    <span>🌿 ERIKA</span> <i class="fa-solid fa-code"></i>
+                </button>
             </div>
-            <button class="del-btn" onclick="removeTask(${task.id})">✕</button>
-          </div>
-          ${task.note ? `<div class="task-note">${task.note}</div>` : ''}
-        `;
-        taskList.appendChild(item);
-      });
+        </div>
+    </div>
 
-      // Progress calculation based on status 3 (Padroneggiato)
-      const targetTasks = currentFilter === 'Tutti' ? tasks : tasks.filter(t => t.subject === currentFilter);
-      const masteredCount = targetTasks.filter(t => t.status === 3).length;
-      const pct = targetTasks.length === 0 ? 0 : Math.round((masteredCount / targetTasks.length) * 100);
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-stethoscope"></i>
+            <span>MedStudio Pro</span>
+        </div>
+        <div class="header-actions">
+            <span id="userBadge" style="font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.6rem; border-radius: 6px; background-color: var(--bg-card); cursor: pointer;" onclick="showWelcomeModal()" title="Cambia Profilo">--</span>
+            <button class="btn btn-secondary" onclick="exportData()" title="Esporta Backup JSON"><i class="fa-solid fa-download"></i></button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" title="Importa Backup JSON"><i class="fa-solid fa-upload"></i></button>
+            <input type="file" id="importFile" style="display:none;" onchange="importData(event)">
+            <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+        </div>
+    </header>
 
-      document.getElementById('progressBar').style.width = pct + '%';
-      document.getElementById('progressText').innerText = pct + '%';
-      document.getElementById('progressLabel').innerText = currentFilter === 'Tutti' ? 'Avanzamento Globale (🟢 Padroneggiati)' : `Avanzamento ${currentFilter} (🟢 Padroneggiati)`;
+    <div class="container">
+        <!-- Saluto Personalizzato -->
+        <div class="card" style="border-left: 5px solid var(--accent);">
+            <h2 id="welcomeGreeting">Ok, iniziamo a studiare!</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Tieni traccia del tuo syllabus e dei tuoi progressi per il semestre aperto.</p>
+        </div>
 
-      // Render Formulas
-      const fList = document.getElementById('formulasList');
-      fList.innerHTML = '';
-      formulas.forEach(f => {
-        const div = document.createElement('div');
-        div.className = 'formula-item';
-        div.innerHTML = `
-          <div>
-            <div class="formula-title">${f.title}</div>
-            <div class="formula-body">${f.body}</div>
-          </div>
-          <button class="del-btn" onclick="removeFormula(${f.id})">✕</button>
-        `;
-        fList.appendChild(div);
-      });
-    }
+        <!-- Dashboard Metrics -->
+        <div class="dashboard-grid">
+            <div class="card metric-card">
+                <div class="metric-value" id="examCountdown">--</div>
+                <div class="metric-label">Giorni all'Esame (10 Dic 2026)</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-value" id="dailyGoal">--</div>
+                <div class="metric-label">Argomenti/Giorno Consigliati</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-value" id="completionRate">0%</div>
+                <div class="metric-label">Avanzamento Syllabus</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-value" id="studyStreak">0 🔥</div>
+                <div class="metric-label">Giorni Consecutivi (Streak)</div>
+            </div>
+        </div>
 
-    document.getElementById('addForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = document.getElementById('taskInput').value.trim();
-      const subject = document.getElementById('subjectInput').value;
-      const note = document.getElementById('noteInput').value.trim();
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('syllabusTab')"><i class="fa-solid fa-book"></i> Syllabus & Spaced Repetition</button>
+            <button class="tab-btn" onclick="switchTab('timerTab')"><i class="fa-solid fa-stopwatch"></i> Pomodoro & Ore</button>
+            <button class="tab-btn" onclick="switchTab('flashcardsTab')"><i class="fa-solid fa-layer-group"></i> Flashcard Roulette</button>
+            <button class="tab-btn" onclick="switchTab('simulationsTab')"><i class="fa-solid fa-chart-line"></i> Simulazioni Quiz</button>
+            <button class="tab-btn" onclick="switchTab('formulasTab')"><i class="fa-solid fa-square-root-variable"></i> Formulario</button>
+        </div>
 
-      if(text) {
-        tasks.push({ id: Date.now(), text, subject, note, status: 0 });
-        document.getElementById('taskInput').value = '';
-        document.getElementById('noteInput').value = '';
-        saveAndRender();
-      }
-    });
+        <!-- TAB 1: SYLLABUS -->
+        <div id="syllabusTab" class="tab-content active">
+            <div class="card" style="background-color: rgba(56, 189, 248, 0.1); border-color: var(--accent);">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> In Scadenza di Ripasso Oggi</h3>
+                <div id="dueTodayList" style="margin-top: 0.5rem;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza di ripasso per oggi. Ottimo lavoro!</p>
+                </div>
+            </div>
 
-    document.getElementById('addFormulaForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const title = document.getElementById('formulaTitle').value.trim();
-      const body = document.getElementById('formulaBody').value.trim();
+            <div id="syllabusContainer"></div>
+        </div>
 
-      if(title && body) {
-        formulas.push({ id: Date.now(), title, body });
-        document.getElementById('formulaTitle').value = '';
-        document.getElementById('formulaBody').value = '';
-        saveAndRender();
-      }
-    });
+        <!-- TAB 2: TIMER -->
+        <div id="timerTab" class="tab-content">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h3 style="text-align: center;"><i class="fa-solid fa-brain"></i> Timer Pomodoro Focus</h3>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted);">Materia della Sessione:</label>
+                    <select id="timerSubjectSelect" style="width: 100%; margin-top: 0.25rem;">
+                        <option value="Biologia">Biologia</option>
+                        <option value="Chimica">Chimica</option>
+                        <option value="Fisica">Fisica</option>
+                    </select>
+                </div>
 
-    updatePomoDisplay();
-    setInterval(updateCountdown, 60000);
-    saveAndRender();
-  </script>
+                <div class="timer-controls">
+                    <button class="btn" id="startTimerBtn" onclick="toggleTimer()"><i class="fa-solid fa-play"></i> Avvia</button>
+                    <button class="btn btn-secondary" onclick="resetTimer()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3><i class="fa-solid fa-chart-pie"></i> Ore Effettive Accumulate per Materia</h3>
+                <div style="display: flex; justify-content: space-around; margin-top: 1rem; text-align: center;">
+                    <div><h4>Biologia</h4><p id="timeBio" class="metric-value">0.0h</p></div>
+                    <div><h4>Chimica</h4><p id="timeChem" class="metric-value">0.0h</p></div>
+                    <div><h4>Fisica</h4><p id="timePhys" class="metric-value">0.0h</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: FLASHCARDS -->
+        <div id="flashcardsTab" class="tab-content">
+            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <h3><i class="fa-solid fa-shuffle"></i> Flashcard Active Recall</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Ripassa in modo casuale gli argomenti contrassegnati come "In Ripasso"</p>
+
+                <div class="flashcard-box" id="flashcardBox" onclick="flipCard()">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <span id="fcSubject" class="metric-label" style="text-transform: uppercase;">Materia</span>
+                            <h3 id="fcTopicTitle" style="margin-top: 0.5rem;">Clicca su "Estrai Flashcard" per iniziare</h3>
+                        </div>
+                        <div class="flashcard-back">
+                            <p id="fcNotes">Note e concetti chiave registrati per questo argomento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 0.75rem;">
+                    <button class="btn" onclick="drawRandomFlashcard()"><i class="fa-solid fa-arrows-rotate"></i> Estrai Nuova Flashcard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SIMULAZIONI -->
+        <div id="simulationsTab" class="tab-content">
+            <div class="card">
+                <h3><i class="fa-solid fa-plus"></i> Registra Nuova Simulazione / Quiz</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+                    <div>
+                        <label style="font-size: 0.8rem;">Risposte Corrette (+1.5):</label>
+                        <input type="number" id="simCorrect" value="0" min="0" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8rem;">Risposte Errate (-0.4):</label>
+                        <input type="number" id="simWrong" value="0" min="0" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8rem;">Omesse (0.0):</label>
+                        <input type="number" id="simOmitted" value="0" min="0" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button class="btn" style="width: 100%;" onclick="addSimulation()"><i class="fa-solid fa-floppy-disk"></i> Salva Risultato</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-list-check"></i> Storico Simulazioni</h3>
+                <div id="simulationsHistory" style="margin-top: 1rem;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nessuna simulazione ancora registrata.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: FORMULARIO -->
+        <div id="formulasTab" class="tab-content">
+            <div class="formula-grid">
+                <div class="card formula-card">
+                    <h4>Fisica: Cinematica & Dinamica</h4>
+                    <p><b>Velocità media:</b> $v = \frac{\Delta s}{\Delta t}$</p>
+                    <p><b>Accelerazione:</b> $a = \frac{\Delta v}{\Delta t}$</p>
+                    <p><b>Legge di Newton:</b> $F = m \cdot a$</p>
+                    <p><b>Lavoro:</b> $L = F \cdot s \cdot \cos(\theta)$</p>
+                </div>
+                <div class="card formula-card">
+                    <h4>Fisica: Fluidi & Termodinamica</h4>
+                    <p><b>Pressione:</b> $P = \frac{F}{S}$</p>
+                    <p><b>Legge di Stevino:</b> $P = P_0 + \rho \cdot g \cdot h$</p>
+                    <p><b>Equazione dei Gas Perfetti:</b> $P \cdot V = n \cdot R \cdot T$</p>
+                </div>
+                <div class="card formula-card">
+                    <h4>Chimica: Moli & Soluzioni</h4>
+                    <p><b>Moli:</b> $n = \frac{m}{PM}$</p>
+                    <p><b>Molarità:</b> $M = \frac{n_{soluto}}{V_{soluzione}(L)}$</p>
+                    <p><b>pH:</b> $pH = -\log_{10}[H^+]$</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const initialSyllabus = {
+            "Biologia": [
+                {
+                    unit: "Unità 1 - Basi dell'organizzazione biologica",
+                    topics: ["1.1 L'albero della vita e classificazione", "1.2 Bioelementi ed acqua", "1.3 Macromolecole biologiche: Proteine", "1.4 Carboidrati e Lipidi", "1.5 Acidi Nucleici (DNA e RNA)"]
+                },
+                {
+                    unit: "Unità 2 - Struttura e Funzione Cellulare",
+                    topics: ["2.1 Organizzazione cellulare procariotica ed eucariotica", "2.2 Membrana cellulare e trasporto", "2.3 Organelli citoplasmatici", "2.4 Bioenergetica cellulare: ATP e Respirazione", "2.5 Fotosintesi clorofilliana"]
+                }
+            ],
+            "Chimica": [
+                {
+                    unit: "Unità 1 - Struttura della Materia",
+                    topics: ["1.1 La struttura dell'atomo e particelle subatomiche", "1.2 Tavola periodica e proprietà periodiche", "1.3 Legami chimici (Ionico, Covalente, Metallico)", "1.4 Forze intermolecolari"]
+                },
+                {
+                    unit: "Unità 2 - Stechiometria e Soluzioni",
+                    topics: ["2.1 Il concetto di Mole e costante di Avogadro", "2.2 Bilanciamento delle reazioni chimiche", "2.3 Concentrazione delle soluzioni (Molarità, Molarità)", "2.4 Reazioni acido-base e calcolo del pH"]
+                }
+            ],
+            "Fisica": [
+                {
+                    unit: "Unità 1 - Cinematica e Dinamica",
+                    topics: ["1.1 Vettori e grandezze fisiche", "1.2 Moto rettilineo uniforme ed uniformemente accelerato", "1.3 I tre principi della Dinamica", "1.4 Forza peso, attrito e forza elastica"]
+                },
+                {
+                    unit: "Unità 2 - Meccanica dei Fluidi",
+                    topics: ["2.1 Densità e Pressione", "2.2 Principio di Pascal e legge di Stevino", "2.3 Principio di Archimede", "2.4 Dinamica dei fluidi ideali: Equazione di continuità e Bernoulli"]
+                }
+            ]
+        };
+
+        let appState = {
+            userName: null,
+            userColor: '#38bdf8',
+            userCustomGreeting: '',
+            topicsData: {},
+            timerSeconds: 25 * 60,
+            timerRunning: false,
+            timerInterval: null,
+            timerLastTimestamp: null,
+            studyHours: { "Biologia": 0, "Chimica": 0, "Fisica": 0 },
+            simulations: [],
+            lastStudyDate: null,
+            streak: 0,
+            theme: 'dark'
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadState();
+            initSyllabusData();
+            
+            if (!appState.userName) {
+                showWelcomeModal();
+            } else {
+                applyUserProfile();
+            }
+
+            renderSyllabus();
+            updateDashboard();
+            updateTimerDisplay();
+            updateStudyHoursDisplay();
+            renderSimulationsHistory();
+            applyTheme();
+        });
+
+        function loadState() {
+            const saved = localStorage.getItem("medstudio_state");
+            if (saved) {
+                try {
+                    appState = Object.assign(appState, JSON.parse(saved));
+                } catch(e) { console.error("Errore caricamento stato", e); }
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem("medstudio_state", JSON.stringify(appState));
+            updateDashboard();
+        }
+
+        function showWelcomeModal() {
+            document.getElementById("welcomeOverlay").style.display = "flex";
+        }
+
+        function selectUserProfile(name, color, customGreeting) {
+            appState.userName = name;
+            appState.userColor = color;
+            appState.userCustomGreeting = customGreeting;
+            saveState();
+            
+            applyUserProfile();
+            document.getElementById("welcomeOverlay").style.display = "none";
+        }
+
+        function applyUserProfile() {
+            if (appState.userName) {
+                document.documentElement.style.setProperty('--accent', appState.userColor);
+                document.getElementById("userBadge").innerText = appState.userName;
+                document.getElementById("userBadge").style.color = appState.userColor;
+                document.getElementById("welcomeGreeting").innerText = appState.userCustomGreeting || `Ok ${appState.userName}, iniziamo!`;
+            }
+        }
+
+        function initSyllabusData() {
+            for (let sub in initialSyllabus) {
+                initialSyllabus[sub].forEach(u => {
+                    u.topics.forEach(t => {
+                        if (!appState.topicsData[t]) {
+                            appState.topicsData[t] = {
+                                subject: sub, status: 'todo', priority: 'med',
+                                lastReviewed: null, nextReview: null, notes: ''
+                            };
+                        }
+                    });
+                });
+            }
+        }
+
+        function renderSyllabus() {
+            const container = document.getElementById("syllabusContainer");
+            container.innerHTML = "";
+
+            const dueTodayContainer = document.getElementById("dueTodayList");
+            dueTodayContainer.innerHTML = "";
+            let dueTodayCount = 0;
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            for (let sub in initialSyllabus) {
+                const subTitle = document.createElement("h2");
+                subTitle.className = "subject-title";
+                subTitle.innerText = sub;
+                container.appendChild(subTitle);
+
+                initialSyllabus[sub].forEach(u => {
+                    const uCard = document.createElement("div");
+                    uCard.className = "card unit-card";
+
+                    const uHeader = document.createElement("div");
+                    uHeader.className = "unit-header";
+                    uHeader.innerHTML = `<span>${u.unit}</span> <i class="fa-solid fa-chevron-down"></i>`;
+                    
+                    const topicList = document.createElement("div");
+                    topicList.className = "topic-list";
+
+                    u.topics.forEach(t => {
+                        const tData = appState.topicsData[t] || {};
+                        const item = document.createElement("div");
+                        item.className = "topic-item";
+
+                        if (tData.nextReview && tData.nextReview <= todayStr && tData.status === 'review') {
+                            dueTodayCount++;
+                            dueTodayContainer.innerHTML += `<div style="padding: 0.3rem 0;"><b>[${sub}]</b> ${t}</div>`;
+                        }
+
+                        item.innerHTML = `
+                            <div class="topic-info">
+                                <span class="priority-badge priority-${tData.priority || 'med'}"></span>
+                                <span style="font-size: 0.95rem; font-weight: 500;">${t}</span>
+                            </div>
+                            <div class="topic-controls">
+                                <select onchange="updateTopicPriority('${t}', this.value)">
+                                    <option value="low" ${tData.priority==='low'?'selected':''}>🟢 Facile</option>
+                                    <option value="med" ${tData.priority==='med'?'selected':''}>🟡 Medio</option>
+                                    <option value="high" ${tData.priority==='high'?'selected':''}>🔴 Critico</option>
+                                </select>
+
+                                <select onchange="updateTopicStatus('${t}', this.value)">
+                                    <option value="todo" ${tData.status==='todo'?'selected':''}>Da Studiare</option>
+                                    <option value="review" ${tData.status==='review'?'selected':''}>In Ripasso</option>
+                                    <option value="done" ${tData.status==='done'?'selected':''}>Completato</option>
+                                </select>
+
+                                <input type="text" placeholder="Note..." value="${tData.notes || ''}" onchange="updateTopicNotes('${t}', this.value)" style="width: 140px;">
+                            </div>
+                        `;
+                        topicList.appendChild(item);
+                    });
+
+                    uCard.appendChild(uHeader);
+                    uCard.appendChild(topicList);
+                    container.appendChild(uCard);
+                });
+            }
+
+            if (dueTodayCount === 0) {
+                dueTodayContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessun argomento in scadenza di ripasso per oggi. Ottimo lavoro!</p>`;
+            }
+        }
+
+        function updateTopicStatus(topic, status) {
+            appState.topicsData[topic].status = status;
+            if (status === 'review') {
+                const next = new Date();
+                next.setDate(next.getDate() + 3);
+                appState.topicsData[topic].nextReview = next.toISOString().split('T')[0];
+            }
+            saveState();
+            renderSyllabus();
+        }
+
+        function updateTopicPriority(topic, priority) {
+            appState.topicsData[topic].priority = priority;
+            saveState();
+            renderSyllabus();
+        }
+
+        function updateTopicNotes(topic, notes) {
+            appState.topicsData[topic].notes = notes;
+            saveState();
+        }
+
+        function updateDashboard() {
+            const examDate = new Date('2026-12-10');
+            const now = new Date();
+            const diffDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
+            document.getElementById("examCountdown").innerText = diffDays > 0 ? diffDays : 0;
+
+            let total = 0, completed = 0;
+            for (let key in appState.topicsData) {
+                total++;
+                if (appState.topicsData[key].status === 'done') completed++;
+            }
+            const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById("completionRate").innerText = rate + "%";
+
+            const remaining = total - completed;
+            const daily = diffDays > 0 ? (remaining / diffDays).toFixed(1) : remaining;
+            document.getElementById("dailyGoal").innerText = daily;
+            document.getElementById("studyStreak").innerText = (appState.streak || 0) + " 🔥";
+        }
+
+        function toggleTimer() {
+            if (appState.timerRunning) {
+                clearInterval(appState.timerInterval);
+                appState.timerRunning = false;
+                document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
+            } else {
+                appState.timerRunning = true;
+                appState.timerLastTimestamp = Date.now();
+                document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-pause"></i> Pausa`;
+                
+                appState.timerInterval = setInterval(() => {
+                    const now = Date.now();
+                    const elapsed = Math.floor((now - appState.timerLastTimestamp) / 1000);
+                    appState.timerLastTimestamp = now;
+
+                    appState.timerSeconds -= elapsed;
+
+                    if (appState.timerSeconds <= 0) {
+                        clearInterval(appState.timerInterval);
+                        appState.timerRunning = false;
+                        appState.timerSeconds = 25 * 60;
+                        alert("Sessione Pomodoro Completata!");
+                        
+                        const selectedSub = document.getElementById("timerSubjectSelect").value;
+                        appState.studyHours[selectedSub] = (appState.studyHours[selectedSub] || 0) + 0.42;
+                        updateStudyHoursDisplay();
+                        updateStreak();
+                        saveState();
+                        document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
+                    }
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            if (appState.timerRunning) clearInterval(appState.timerInterval);
+            appState.timerRunning = false;
+            appState.timerSeconds = 25 * 60;
+            document.getElementById("startTimerBtn").innerHTML = `<i class="fa-solid fa-play"></i> Avvia`;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(appState.timerSeconds / 60);
+            const secs = appState.timerSeconds % 60;
+            document.getElementById("timerDisplay").innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateStudyHoursDisplay() {
+            document.getElementById("timeBio").innerText = (appState.studyHours["Biologia"] || 0).toFixed(1) + "h";
+            document.getElementById("timeChem").innerText = (appState.studyHours["Chimica"] || 0).toFixed(1) + "h";
+            document.getElementById("timePhys").innerText = (appState.studyHours["Fisica"] || 0).toFixed(1) + "h";
+        }
+
+        function updateStreak() {
+            const today = new Date().toISOString().split('T')[0];
+            if (appState.lastStudyDate !== today) {
+                appState.streak = (appState.streak || 0) + 1;
+                appState.lastStudyDate = today;
+            }
+        }
+
+        function flipCard() {
+            document.getElementById("flashcardBox").classList.toggle("flipped");
+        }
+
+        function drawRandomFlashcard() {
+            document.getElementById("flashcardBox").classList.remove("flipped");
+            const reviewTopics = Object.keys(appState.topicsData).filter(t => appState.topicsData[t].status === 'review' || appState.topicsData[t].status === 'todo');
+            
+            if (reviewTopics.length === 0) {
+                document.getElementById("fcSubject").innerText = "INFO";
+                document.getElementById("fcTopicTitle").innerText = "Nessun argomento da ripassare!";
+                document.getElementById("fcNotes").innerText = "Imposta degli argomenti su 'In Ripasso' nel Syllabus.";
+                return;
+            }
+
+            const randomKey = reviewTopics[Math.floor(Math.random() * reviewTopics.length)];
+            const tData = appState.topicsData[randomKey];
+
+            setTimeout(() => {
+                document.getElementById("fcSubject").innerText = tData.subject;
+                document.getElementById("fcTopicTitle").innerText = randomKey;
+                document.getElementById("fcNotes").innerText = tData.notes || "Nessuna nota aggiuntiva per questo argomento.";
+            }, 200);
+        }
+
+        function addSimulation() {
+            const correct = parseFloat(document.getElementById("simCorrect").value) || 0;
+            const wrong = parseFloat(document.getElementById("simWrong").value) || 0;
+            const omitted = parseFloat(document.getElementById("simOmitted").value) || 0;
+
+            const score = (correct * 1.5) - (wrong * 0.4);
+            const simResult = {
+                date: new Date().toLocaleDateString('it-IT'),
+                score: score.toFixed(1),
+                correct, wrong, omitted
+            };
+
+            appState.simulations.unshift(simResult);
+            saveState();
+            renderSimulationsHistory();
+        }
+
+        function renderSimulationsHistory() {
+            const hist = document.getElementById("simulationsHistory");
+            if (!appState.simulations || appState.simulations.length === 0) {
+                hist.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Nessuna simulazione ancora registrata.</p>`;
+                return;
+            }
+
+            hist.innerHTML = appState.simulations.map(s => `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 0.5rem 0;">
+                    <div>
+                        <b>Punteggio: ${s.score} pt</b> <span style="font-size: 0.8rem; color: var(--text-muted);">(${s.date})</span>
+                    </div>
+                    <div style="font-size: 0.85rem;">
+                        🟢 ${s.correct} | 🔴 ${s.wrong} | ⚪ ${s.omitted}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+            
+            document.getElementById(tabId).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `medstudio_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importData(event) {
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                try {
+                    appState = JSON.parse(e.target.result);
+                    saveState();
+                    location.reload();
+                } catch(err) {
+                    alert("File di backup non valido!");
+                }
+            };
+            fileReader.readAsText(event.target.files[0]);
+        }
+
+        function toggleTheme() {
+            appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
+            applyTheme();
+            saveState();
+        }
+
+        function applyTheme() {
+            document.documentElement.setAttribute('data-theme', appState.theme);
+            document.getElementById("themeBtn").innerHTML = appState.theme === 'dark' ? `<i class="fa-solid fa-sun"></i>` : `<i class="fa-solid fa-moon"></i>`;
+        }
+    </script>
 </body>
 </html>
-
